@@ -1,0 +1,21 @@
+.actions-header {
+  display: flex;
+  align-items: center;
+
+  > * {
+    display: inline-block;
+    flex: 1 1 auto;
+  }
+
+  > .actions {
+    flex: 0 0 auto;
+    margin-left: 1em;
+    display: inline-flex;
+    align-items: center;
+
+    > * {
+      flex: 0 0 auto;
+      margin: 0 .5em;
+    }
+  }
+}

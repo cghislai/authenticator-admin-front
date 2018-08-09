@@ -1,0 +1,32 @@
+
+form.auth-form {
+  display: inline-block;
+  position: relative;
+
+  > .row {
+    display: flex;
+    align-items: center;
+    margin: 1em;
+
+    > * {
+      flex: 1 1 auto;
+      display: inline-block;
+    }
+    > label {
+      flex: 0 0 30%;
+      opacity: .8;
+      font-size: small;
+    }
+  }
+
+  >.actions {
+    margin: 1em;
+    text-align: center;
+
+    >button {
+      margin: 0 1em;
+
+
+    }
+  }
+}

@@ -1,15 +1,16 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {ComponentListComponent} from './component-list/component-list.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'component',
+    redirectTo: 'list',
   },
   {
-    path: 'component',
-    loadChildren: './component/component.module#ComponentModule',
+    path: 'list',
+    component: ComponentListComponent,
   },
 ];
 
@@ -17,5 +18,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AdminRoutingModule {
+export class ComponentRoutingModule {
 }

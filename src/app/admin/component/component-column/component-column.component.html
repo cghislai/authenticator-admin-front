@@ -1,0 +1,13 @@
+<span [ngSwitch]="column.type"
+      *ngIf="value != null"
+>
+  <span *ngSwitchCase="'ACTIVE'">
+    <i class="pi pi-check-circle active" *ngIf="value.active"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.active"></i>
+  </span>
+
+  <span *ngSwitchDefault>
+    {{ value[column.field] }}
+  </span>
+
+</span>

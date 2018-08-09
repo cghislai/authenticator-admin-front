@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       // TODO
     }
     if (user.admin) {
-      this.router.navigate(['/me']);
+      this.router.navigate(['/admin']);
     } else {
       this.router.navigate(['/me']);
     }

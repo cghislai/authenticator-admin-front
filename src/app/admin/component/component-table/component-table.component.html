@@ -1,0 +1,35 @@
+<p-table [value]="components"
+         [columns]="columns"
+         (onLazyLoad)="onPaginationChange($event)"
+         [paginator]="true"
+         [rows]="pagination.length"
+         [first]="pagination.offset"
+         [totalRecords]="totalCount"
+         [loading]="loading"
+         [rowHover]="true"
+>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        {{col.header}}
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-component let-columns="columns">
+    <tr (click)="onRowClick(component)">
+      <td *ngFor="let col of columns">
+        <auth-component-column [column]="col"
+                               [value]="component"
+        ></auth-component-column>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        No records found
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

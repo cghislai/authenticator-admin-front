@@ -1,0 +1,52 @@
+<form class="component-form auth-form" *ngIf="value != null"
+      #form="ngForm" (ngSubmit)="onSubmit()"
+>
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Id</label>
+    <span>{{ value.id }}</span>
+  </div>
+
+  <div class="row">
+    <label>Name</label>
+    <span>
+      <input type="text" pInputText
+             [(ngModel)]="value.name"
+             name="name"
+             required
+      >
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Active</label>
+    <span>
+      <p-inputSwitch [(ngModel)]="value.active"
+                     name="active"
+      ></p-inputSwitch>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>EndpointUrl</label>
+    <span>
+      <input type="url" pInputText
+             [(ngModel)]="value.endpointUrl"
+             name="url"
+             required>
+    </span>
+  </div>
+
+  <div class="actions">
+    <input type="submit" hidden>
+    <button type="button" pButton
+            label="Cancel"
+            class="ui-button-secondary"
+            (click)="onCancel()"></button>
+    <button type="button" pButton
+            label="Submit"
+            [disabled]="form.invalid"
+            (click)="onSubmit()"></button>
+  </div>
+
+</form>

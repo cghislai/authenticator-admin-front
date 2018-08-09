@@ -1,0 +1,21 @@
+.component-filter {
+  > .content {
+
+    margin: .5em;
+
+    > .control, > .actions {
+      margin: .5em 1em;
+    }
+
+    > .control {
+      display: inline-flex;
+      align-items: center;
+      > * {
+        flex: 0 0 auto;
+        display: inline-block;
+        margin: .3em;
+      }
+    }
+  }
+
+}

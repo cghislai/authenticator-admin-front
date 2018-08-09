@@ -1,0 +1,34 @@
+<div class="component-list ui-widget">
+
+  <header class="actions-header">
+    <h1>Components</h1>
+    <span class="actions">
+      <button type="button" pButton
+              label="Create new component"
+              (click)="onNewComponentClick()"></button>
+    </span>
+  </header>
+
+  <auth-component-filter [ngModel]="filter | async"
+                         (ngModelChange)="onFilterChange($event)"
+  ></auth-component-filter>
+
+  <auth-component-table [components]="values | async"
+                        [totalCount]="totalCount | async"
+                        [columns]="columns | async"
+                        [loading]="loading"
+                        [pagination]="pagination | async"
+                        (paginationChange)="onPaginationChanged($event)"
+                        (rowClick)="onComponentSelected($event)"
+  ></auth-component-table>
+
+  <p-dialog header="Component edition"
+            [visible]="editingComponent != null"
+            [closable]="false"
+            [modal]="true">
+    <auth-component-form [ngModel]="editingComponent"
+                         (ngModelChange)="onComponentEdited($event)"
+                         (cancel)="onComponentEditCancel()"
+    ></auth-component-form>
+  </p-dialog>
+</div>
