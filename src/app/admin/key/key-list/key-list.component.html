@@ -1,0 +1,34 @@
+<div class="key-list ui-widget">
+
+  <header class="actions-header">
+    <h1>Keys</h1>
+    <span class="actions">
+      <button type="button" pButton
+              label="Create new key"
+              (click)="onNewKeyClick()"></button>
+    </span>
+  </header>
+
+  <auth-key-filter [ngModel]="filter | async"
+                   (ngModelChange)="onFilterChange($event)"
+  ></auth-key-filter>
+
+  <auth-key-table [keys]="values | async"
+                  [totalCount]="totalCount | async"
+                  [columns]="columns | async"
+                  [loading]="loading"
+                  [pagination]="pagination | async"
+                  (paginationChange)="onPaginationChanged($event)"
+                  (rowClick)="onKeySelected($event)"
+  ></auth-key-table>
+
+  <p-dialog header="Component edition"
+            [visible]="editingKey != null"
+            [closable]="false"
+            [modal]="true">
+    <auth-key-form [ngModel]="editingKey"
+                   (ngModelChange)="onKeyEdited($event)"
+                   (cancel)="onKeyEditCancel()"
+    ></auth-key-form>
+  </p-dialog>
+</div>

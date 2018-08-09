@@ -1,0 +1,27 @@
+<div class="admin-area">
+  <div class="menu">
+
+    <a [routerLink]="['/admin/component']"
+       routerLinkActive="active"
+    >
+      <i class="fa fa-cubes"></i>
+    </a>
+
+    <a [routerLink]="['/admin/user']"
+       routerLinkActive="active"
+    >
+      <i class="fa fa-users"></i>
+    </a>
+
+    <a [routerLink]="['/admin/key']"
+       routerLinkActive="active"
+    >
+      <i class="fa fa-key"></i>
+    </a>
+
+
+  </div>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

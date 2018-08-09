@@ -1,0 +1,25 @@
+<span [ngSwitch]="column.type"
+      *ngIf="value != null"
+>
+  <span *ngSwitchCase="'ACTIVE'">
+    <i class="pi pi-check-circle active" *ngIf="value.active"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.active"></i>
+  </span>
+  <span *ngSwitchCase="'ADMIN'">
+    <i class="pi pi-check-circle active" *ngIf="value.admin"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.admin"></i>
+  </span>
+  <span *ngSwitchCase="'EMAIL_VERIFIED'">
+    <i class="pi pi-check-circle active" *ngIf="value.emailVerified"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.emailVerified"></i>
+  </span>
+  <span *ngSwitchCase="'PASSWORD_EXPIRED'">
+    <i class="pi pi-check-circle active" *ngIf="value.passwordExpired"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.passwordExpired"></i>
+  </span>
+
+  <span *ngSwitchDefault>
+    {{ value[column.field] }}
+  </span>
+
+</span>

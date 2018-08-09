@@ -1,5 +1,18 @@
 <div class="header ui-widget">
+
   <span class="title">
     {{ providerName | async }}
   </span>
+
+  <a [routerLink]="['/admin']"
+     *ngIf="loggedUserIsAdmin | async">
+    <i class="fa fa-cog"></i>
+  </a>
+
+  <span class="separator"></span>
+
+  <a [routerLink]="['/me']" >
+    {{ loggedUserName | async }}
+  </a>
+
 </div>

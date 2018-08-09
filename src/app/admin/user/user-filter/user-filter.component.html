@@ -1,0 +1,39 @@
+<form class="user-filter ui-widget"
+      #form="ngForm" [ngFormOptions]="{updateOn: 'change'}"
+>
+  <div *ngIf="value != null" class="content">
+
+    <span class="control">
+      <p-triStateCheckbox [(ngModel)]="value.active"
+                          label="Active"
+                          name="active"
+      ></p-triStateCheckbox>
+    </span>
+
+    <span class="control">
+      <label>Name contains</label>
+      <span>
+        <input type="text" pInputText
+               [(ngModel)]="value.nameContains"
+               name="nameContains"
+        >
+      </span>
+    </span>
+
+    <span class="control">
+      <p-triStateCheckbox [(ngModel)]="value.passwordExpired"
+                          label="Password expired"
+                          name="password-expired"
+      ></p-triStateCheckbox>
+    </span>
+
+    <span class="control">
+      <p-triStateCheckbox [(ngModel)]="value.admin"
+                          label="Admin"
+                          name="admin"
+      ></p-triStateCheckbox>
+    </span>
+
+  </div>
+
+</form>

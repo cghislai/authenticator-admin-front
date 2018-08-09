@@ -1,0 +1,34 @@
+<div class="user-list ui-widget">
+
+  <header class="actions-header">
+    <h1>Users</h1>
+    <span class="actions">
+      <button type="button" pButton
+              label="Create new user"
+              (click)="onNewUserClick()"></button>
+    </span>
+  </header>
+
+  <auth-user-filter [ngModel]="filter | async"
+                    (ngModelChange)="onFilterChange($event)"
+  ></auth-user-filter>
+
+  <auth-user-table [users]="values | async"
+                   [totalCount]="totalCount | async"
+                   [columns]="columns | async"
+                   [loading]="loading"
+                   [pagination]="pagination | async"
+                   (paginationChange)="onPaginationChanged($event)"
+                   (rowClick)="onUserSelected($event)"
+  ></auth-user-table>
+
+  <p-dialog header="Component edition"
+            [visible]="editingUser != null"
+            [closable]="false"
+            [modal]="true">
+    <auth-user-form [ngModel]="editingUser"
+                    (ngModelChange)="onUserEdited($event)"
+                    (cancel)="onUserEditCancel()"
+    ></auth-user-form>
+  </p-dialog>
+</div>

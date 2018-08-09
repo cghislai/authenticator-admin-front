@@ -1,11 +1,19 @@
 .header {
   background-color: palegreen;
   display: flex;
-  align-items: center;
+  align-items: stretch;
 
   > * {
-    flex: 1 1 auto;
-    margin: 1em;
-    font-size: large;
+    flex: 0 0  auto;
+    display: inline-block;
+    padding: .2em;
+  }
+
+  >a {
+    margin: 0 1em;
+  }
+
+  >.separator {
+    flex: 1 1 100%;
   }
 }

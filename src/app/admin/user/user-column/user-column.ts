@@ -1,0 +1,9 @@
+export const enum UserColumn {
+  ID = 'ID',
+  NAME = 'NAME',
+  EMAIL = 'EMAIL',
+  ACTIVE = 'ACTIVE',
+  ADMIN = 'ADMIN',
+  EMAIL_VERIFIED = 'EMAIL_VERIFIED',
+  PASSWORD_EXPIRED = 'PASSWORD_EXPIRED',
+}

@@ -2,6 +2,7 @@
 @import "~primeicons/primeicons.css";
 @import "~primeng/resources/themes/nova-light/theme.css";
 @import "~primeng/resources/primeng.min.css";
+@import "~font-awesome/css/font-awesome.min.css";
 //
 @import "assets/styles/forms";
 @import "assets/styles/action-header";
@@ -10,6 +11,7 @@
 body {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 // FIX ppassword feedback=false

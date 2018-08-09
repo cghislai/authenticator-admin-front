@@ -1,0 +1,26 @@
+<span [ngSwitch]="column.type"
+      *ngIf="value != null"
+>
+  <span *ngSwitchCase="'ACTIVE'">
+    <i class="pi pi-check-circle active" *ngIf="value.active"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.active"></i>
+  </span>
+
+  <span *ngSwitchCase="'FOR_APPLICATION_SECRETS'">
+    <i class="pi pi-check-circle active" *ngIf="value.forApplicationSecrets"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.forApplicationSecrets"></i>
+  </span>
+
+  <span *ngSwitchCase="'CREATION_DATE_TIME'">
+    {{ value.creationDateTime | date:'long' }}
+  </span>
+
+  <span *ngSwitchCase="'COMPONENT_ID'">
+      <!-- TODO: component display -->
+  </span>
+
+  <span *ngSwitchDefault>
+    {{ value[column.field] }}
+  </span>
+
+</span>

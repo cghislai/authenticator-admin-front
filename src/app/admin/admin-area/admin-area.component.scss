@@ -1,0 +1,33 @@
+.admin-area {
+  display: flex;
+  align-items: stretch;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+
+  > .menu {
+    flex: 0 0 2em;
+    font-size: large;
+    background-color: palegreen;
+
+    > a {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      padding: .3em;
+
+      &.active {
+
+      }
+      &:hover {
+
+      }
+    }
+  }
+
+  > .content {
+    flex: 1 1 100%;
+    margin: 1em;
+  }
+}
