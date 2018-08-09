@@ -4,6 +4,7 @@ import {TokenService} from './token.service';
 import {BACKEND_URL_TOKEN} from './configuration/backend-url-token';
 import {Observable} from 'rxjs';
 
+@Injectable()
 export class TokenInterceptorService implements HttpInterceptor {
 
   constructor(private tokenService: TokenService,
@@ -11,6 +12,11 @@ export class TokenInterceptorService implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (this.tokenService == null) {
+      console.error('no token service');
+      console.log(req);
+      return next.handle(req);
+    }
     if (!req.url.startsWith(this.backendUrl)) {
       return next.handle(req);
     }

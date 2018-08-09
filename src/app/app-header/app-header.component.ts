@@ -3,6 +3,7 @@ import {ProviderInfoService} from '../provider-info.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {LoggedUserService} from '../logged-user.service';
+import {TokenService} from '../token.service';
 
 @Component({
   selector: 'auth-app-header',
@@ -14,8 +15,10 @@ export class AppHeaderComponent implements OnInit {
   providerName: Observable<string>;
   loggedUserName: Observable<string>;
   loggedUserIsAdmin: Observable<boolean>;
+  loggedUserIsNotNull: Observable<boolean>;
 
   constructor(private providerInfoService: ProviderInfoService,
+              private tokenService: TokenService,
               private loggedUserService: LoggedUserService) {
   }
 
@@ -30,6 +33,13 @@ export class AppHeaderComponent implements OnInit {
       .pipe(
         map(user => user == null ? false : user.admin),
       );
+    this.loggedUserIsNotNull = this.loggedUserService.getLoggedUserObservable()
+      .pipe(
+        map(user => user != null ),
+      );
   }
 
+  onLogout() {
+    this.tokenService.clearToken();
+  }
 }

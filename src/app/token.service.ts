@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, EMPTY, Observable, Subscription, timer} from 'rxjs';
 import {BACKEND_URL_TOKEN} from './configuration/backend-url-token';
-import {catchError, delay, first, map, mergeMap, publishReplay, refCount, take, tap, throwIfEmpty} from 'rxjs/operators';
+import {catchError, first, mergeMap, take, throwIfEmpty} from 'rxjs/operators';
 import {MessageService} from 'primeng/api';
 import {JosePayload} from './domain/JosePayload';
 import moment from 'moment-es6';
@@ -12,41 +12,32 @@ import {Router} from '@angular/router';
   providedIn: 'root',
 })
 export class TokenService {
+  private static TOKEN_STORAGE_KEY = 'token';
 
   private token = new BehaviorSubject<string>(null);
-  private josePayload: Observable<JosePayload>;
 
-  private newTokenSubscription: Subscription;
   private tokenExpirationSubscription: Subscription;
 
   constructor(private httpClient: HttpClient,
               private messageService: MessageService,
               private router: Router,
               @Inject(BACKEND_URL_TOKEN) private backendUrl: string) {
-    this.josePayload = this.token.pipe(
-      map(token => this.decodeJwtPayload(token)),
-      publishReplay(1), refCount(),
-    );
-    this.newTokenSubscription = this.josePayload
-      .subscribe(payload => this.watchTokenExpiration(payload));
+    timer(100)
+      .subscribe(() => this.loadTokenFromStorage());
   }
 
-  login(userName: string, password: string): Observable<any> {
+  login(userName: string, password: string) {
     const base64Credentials = btoa(`${userName}:${password}`);
     const headers = new HttpHeaders()
       .set('Authorization', `Basic ${base64Credentials}`);
-    const loginTask = this.httpClient.get(`${this.backendUrl}/token`, {
+    this.httpClient.get(`${this.backendUrl}/token`, {
       responseType: 'text',
       withCredentials: true,
       headers: headers,
-    }).pipe(
-      delay(0),
-      tap(
-        token => this.token.next(token),
-        error => this.onLoginError(error),
-      ),
+    }).subscribe(
+      token => this.setToken(token),
+      error => this.onLoginError(error),
     );
-    return loginTask;
   }
 
   hasValidToken(): boolean {
@@ -62,12 +53,23 @@ export class TokenService {
   }
 
   clearToken() {
-    this.token.next(null);
+    this.setToken(null);
     this.unWatchTokenExpiration();
     this.router.navigate(['/']);
   }
 
-  private renewToken() {
+  private setToken(token: string) {
+    if (token == null) {
+      this.clearTokenFromStorage();
+    } else {
+      this.persistToken(token);
+      const payload = this.decodeJwtPayload(token);
+      this.watchTokenExpiration(payload);
+    }
+    this.token.next(token);
+  }
+
+  private renewToken(): Observable<string> {
     return this.httpClient.get(`${this.backendUrl}/token`, {
       responseType: 'text',
       withCredentials: true,
@@ -125,7 +127,7 @@ export class TokenService {
       throwIfEmpty(() => new Error('Could not renew token')),
       first(),
     ).subscribe(
-      token => this.token.next(token),
+      token => this.setToken(token),
       error => this.onTokenRenewalError(error),
     );
   }
@@ -146,5 +148,40 @@ export class TokenService {
   private onTokenRenewalError(error: any) {
     console.warn(error);
     this.clearToken();
+  }
+
+  private persistToken(token: string) {
+    if (localStorage == null) {
+      return;
+    }
+    localStorage.setItem(TokenService.TOKEN_STORAGE_KEY, token);
+  }
+
+  private clearTokenFromStorage() {
+    if (localStorage == null) {
+      return;
+    }
+    localStorage.removeItem(TokenService.TOKEN_STORAGE_KEY);
+  }
+
+  private loadTokenFromStorage() {
+    if (localStorage == null) {
+      return;
+    }
+    const token = localStorage.getItem(TokenService.TOKEN_STORAGE_KEY);
+    if (token == null) {
+      return;
+    }
+    const authorizationHeader = `Bearer ${token}`;
+    const header = new HttpHeaders()
+      .set('Authorization', authorizationHeader);
+    return this.httpClient.get(`${this.backendUrl}/token`, {
+      responseType: 'text',
+      withCredentials: true,
+      headers: header,
+    }).subscribe(
+      renewedToken => this.setToken(renewedToken),
+      error => this.clearToken(),
+    );
   }
 }

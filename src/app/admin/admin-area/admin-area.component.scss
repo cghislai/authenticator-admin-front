@@ -9,7 +9,10 @@
   > .menu {
     flex: 0 0 2em;
     font-size: large;
-    background-color: palegreen;
+
+    background-color: dodgerblue;
+    color: white;
+
 
     > a {
       display: inline-block;
@@ -17,11 +20,15 @@
       text-align: center;
       padding: .3em;
 
+      color: white;
+
       &.active {
 
       }
-      &:hover {
 
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
       }
     }
   }

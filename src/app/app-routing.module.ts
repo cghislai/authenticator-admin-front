@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {Route, RouterModule} from '@angular/router';
 import {LoginComponent} from './login/login.component';
-import {UserInfoComponent} from './user-info/user-info.component';
 import {LoggedUserGuard} from './logged-user.guard';
 import {LoggedAdminGuard} from './logged-admin.guard';
 
@@ -16,8 +15,8 @@ export const ROUTES: Route[] = [
     component: LoginComponent,
   },
   {
-    path: 'me',
-    component: UserInfoComponent,
+    path: 'user',
+    loadChildren: './user/user-area.module#UserAreaModule',
     canActivate: [LoggedUserGuard],
   },
   {

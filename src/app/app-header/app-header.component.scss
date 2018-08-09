@@ -1,19 +1,32 @@
 .header {
-  background-color: palegreen;
+  background-color: dodgerblue;
+  color: white;
+
   display: flex;
   align-items: stretch;
 
   > * {
-    flex: 0 0  auto;
+    flex: 0 0 auto;
     display: inline-block;
-    padding: .2em;
+    padding: .3em;
   }
 
-  >a {
-    margin: 0 1em;
+  > .title {
+    margin-right: 1em;
   }
 
-  >.separator {
+  > a {
+    padding: .3em .5em;
+
+    color: white;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+    }
+  }
+
+  > .separator {
     flex: 1 1 100%;
   }
 }

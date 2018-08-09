@@ -20,14 +20,16 @@ export class LoggedUserGuard implements CanActivate {
       .pipe(
         mapTo(true),
         defaultIfEmpty(false),
-        tap(a => this.onAuthorized(a)),
+        tap(a => this.onAuthorized(a, state.url)),
       );
   }
 
 
-  private onAuthorized(auth: boolean) {
+  private onAuthorized(auth: boolean, next: string) {
     if (!auth) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login', {
+        next: next,
+      }]);
     }
   }
 }

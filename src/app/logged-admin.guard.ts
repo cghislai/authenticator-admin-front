@@ -21,13 +21,15 @@ export class LoggedAdminGuard implements CanActivate {
         filter(u => u.admin),
         mapTo(true),
         defaultIfEmpty(false),
-        tap(auth => this.onAuthorized(auth)),
+        tap(auth => this.onAuthorized(auth, state.url)),
       );
   }
 
-  private onAuthorized(auth: boolean) {
+  private onAuthorized(auth: boolean, next: string) {
     if (!auth) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login', {
+        next: next,
+      }]);
     }
   }
 }

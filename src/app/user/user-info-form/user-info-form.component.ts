@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {WsUser} from '@charlyghislain/core-web-api';
-import {LoggedUserService} from '../logged-user.service';
+import {LoggedUserService} from '../../logged-user.service';
 
 @Component({
   selector: 'auth-user-info-form',
