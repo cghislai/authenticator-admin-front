@@ -1,0 +1,11 @@
+.header {
+  background-color: palegreen;
+  display: flex;
+  align-items: center;
+
+  > * {
+    flex: 1 1 auto;
+    margin: 1em;
+    font-size: large;
+  }
+}

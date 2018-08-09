@@ -1,0 +1,18 @@
+.login {
+  margin: 2em;
+  text-align: center;
+
+  > form {
+    display: inline-block;
+    width: 20em;
+
+    > .row {
+      margin: 1em;
+      overflow: hidden;
+
+      >* {
+        width: 100%;
+      }
+    }
+  }
+}

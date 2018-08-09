@@ -1,0 +1,12 @@
+<div class="user-info ui-widget">
+  <div class="content">
+    <header>
+      {{ name | async }}
+    </header>
+    <p>
+      Here is the information we hold about you
+    </p>
+    <auth-user-info-form [user]="user | async"
+    ></auth-user-info-form>
+  </div>
+</div>

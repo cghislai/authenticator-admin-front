@@ -1,0 +1,127 @@
+<div class="form" *ngIf="value != null">
+
+  <div class="row">
+    <label>Name</label>
+    <span>
+        <p-inplace #nameInplace
+                   (focusout)="nameInplace.deactivate()">
+          <span pInplaceDisplay>
+              {{ value.name }}
+          </span>
+          <span pInplaceContent>
+              <input type="text" pInputText
+                     [(ngModel)]="value.name"
+                     #nameInput autofocus
+              >
+              <a (click)="updateName($event)">
+                <i class="pi pi-check-circle"></i>
+              </a>
+             <a (click)="nameInplace.deactivate($event)">
+                <i class="pi pi-times-circle"></i>
+             </a>
+          </span>
+        </p-inplace>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Email</label>
+    <span>
+        <p-inplace #emailInplace
+                   (focusout)="emailInplace.deactivate()">
+          <span pInplaceDisplay>
+              {{ value.email }}
+          </span>
+          <span pInplaceContent>
+              <input type="text" pInputText
+                     [(ngModel)]="value.email"
+                     #emailInput autofocus
+              >
+              <a (click)="updateEmail($event)">
+                <i class="pi pi-check-circle"></i>
+              </a>
+             <a (click)="emailInplace.deactivate($event)">
+                <i class="pi pi-times-circle"></i>
+             </a>
+          </span>
+        </p-inplace>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Active</label>
+    <span>
+          <i class="pi pi-check-circle"
+             *ngIf="value.active"
+          ></i>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Admin</label>
+    <span>
+          <i class="pi pi-check-circle"
+             *ngIf="value.admin"
+          ></i>
+    </span>
+  </div>
+  <div class="row">
+    <label>Email verified</label>
+    <span>
+          <i class="pi pi-check-circle"
+             *ngIf="value.emailVerified"
+          ></i>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Password expired</label>
+    <span>
+          <i class="pi pi-check-circle"
+             *ngIf="value.passwordExpired"
+          ></i>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Password</label>
+    <span>
+         <p-inplace #passwordInplace>
+          <span pInplaceDisplay>
+              Change password
+          </span>
+      <form pInplaceContent #passwordForm="ngForm" (submit)="updatePassword()"
+      class="password-form">
+        <input type="password" pPassword
+               [feedback]="false"
+               [(ngModel)]="newPassword"
+               placeholder="Password"
+               autocomplete="false"
+               name="password"
+               #passwordInput autofocus
+               required
+        >
+        <input type="password" pPassword
+               [feedback]="false"
+               [(ngModel)]="newPasswordConfirm"
+               placeholder="Password confirmation"
+               autocomplete="false"
+               name="password-confirm"
+               #passwordConfirmInput
+               required
+        >
+        <input type="submit" hidden>
+        <a (click)="passwordForm.submit()">
+          <i class="pi pi-check-circle"></i>
+          <span>Update password</span>
+        </a>
+        <a (click)="passwordInplace.deactivate($event)">
+          <i class="pi pi-times-circle"></i>
+          <span>Cancel</span>
+        </a>
+      </form>
+    </p-inplace>
+    </span>
+  </div>
+
+</div>

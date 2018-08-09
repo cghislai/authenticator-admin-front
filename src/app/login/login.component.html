@@ -1,0 +1,32 @@
+<div class="login">
+  <form #loginForm="ngForm" (submit)="onSubmit()">
+    <div class="row ui-widget">
+      <p>
+        Please identify yourself to continue
+      </p>
+    </div>
+    <div class="row">
+      <input type="text" pInputText
+             [(ngModel)]="name"
+             name="username"
+             placeholder="Username"
+             autofocus
+             required>
+    </div>
+    <div class="row">
+      <input type="password" pPassword
+             [(ngModel)]="password"
+             [feedback]="false"
+             name="password"
+             placeholder="Password"
+             autocomplete="password"
+             required>
+    </div>
+    <div class="row">
+      <input type="submit" hidden>
+      <button type="button" pButton
+              label="Login"
+              (click)="onSubmit()"></button>
+    </div>
+  </form>
+</div>

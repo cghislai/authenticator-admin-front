@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~primeicons/primeicons.css";
+@import "~primeng/resources/themes/nova-light/theme.css";
+@import "~primeng/resources/primeng.min.css";
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+// FIX ppassword feedback=false
+.ui-password-panel {
+  display: none;
+}
+
+.ui-inplace .ui-inplace-display {
+  display: inline-block;
+}
+.ui-inplace .ui-inplace-content {
+  display: inline-block;
+}
