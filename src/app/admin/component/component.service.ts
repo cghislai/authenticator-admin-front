@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import {BACKEND_URL_TOKEN} from '../../configuration/backend-url-token';
 import {HttpClient} from '@angular/common/http';
 import {MessageService} from 'primeng/api';
-import {ComponentFilter, Pagination, WsApplicationComponent} from '@charlyghislain/core-web-api';
+import {ComponentFilter, Pagination, WsApplicationComponent, WsApplicationComponentHealth} from '@charlyghislain/core-web-api';
 import {Observable} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
 import {ListResult} from '../../domain/list-result';
@@ -28,6 +28,18 @@ export class ComponentService {
       }).pipe(map(response => ListResultsUtils.wrapResponse(response)));
   }
 
+
+  getComponent(id: number): Observable<WsApplicationComponent> {
+    return this.httpClient.get<WsApplicationComponent>(
+      `${this.backendUrl}/admin/component/${id}`);
+  }
+
+
+  checkComponentHealth(id: number): Observable<WsApplicationComponentHealth> {
+    return this.httpClient.get<WsApplicationComponentHealth>(
+      `${this.backendUrl}/admin/component/${id}/health`);
+  }
+
   saveComponent(component: WsApplicationComponent): Observable<WsApplicationComponent> {
     if (component.id != null) {
       return this.updateComponent(component);
@@ -35,6 +47,41 @@ export class ComponentService {
       return this.createComponent(component);
     }
 
+  }
+
+  createComponentSecret(component: WsApplicationComponent): Observable<string> {
+    return this.httpClient.get(
+      `${this.backendUrl}/admin/component/${component.id}/secretToken`, {
+        responseType: 'text',
+      }).pipe(
+      tap(null, (error) => this.messageService.add({
+        severity: 'error',
+        summary: 'Could not generate component secret',
+      })),
+    );
+  }
+
+  getPublicKeyUrl(component: WsApplicationComponent): string {
+    if (component == null || component.name == null) {
+      return null;
+    }
+    return `${this.backendUrl}/info/component/${component.name}/publicKey`;
+  }
+
+
+  getPublicKey(component: WsApplicationComponent): Observable<string> {
+    if (component == null || component.name == null) {
+      return null;
+    }
+    return this.httpClient.get(
+      `${this.backendUrl}/info/component/${component.name}/publicKey`, {
+        responseType: 'text',
+      }).pipe(
+      tap(null, (error) => this.messageService.add({
+        severity: 'error',
+        summary: 'Could not load public key',
+      })),
+    );
   }
 
   createEmptyComponent(): WsApplicationComponent {

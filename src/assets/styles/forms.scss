@@ -11,6 +11,11 @@ form.auth-form {
     > * {
       flex: 1 1 auto;
       display: inline-block;
+      position: relative;
+
+      >input {
+        width: 100%;
+      }
     }
     > label {
       flex: 0 0 30%;

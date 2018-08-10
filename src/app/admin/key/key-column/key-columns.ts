@@ -44,5 +44,4 @@ export namespace KeyColumns {
     header: 'Component',
   };
 
-
 }

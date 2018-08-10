@@ -37,6 +37,61 @@
     </span>
   </div>
 
+  <div class="row" *ngIf="value.id != null">
+    <label>Component secret</label>
+    <span>
+      <p-inplace [closable]="true"
+                 (onActivate)="createComponentSecret()"
+      >
+        <span pInplaceDisplay>
+          Create secret
+        </span>
+        <span pInplaceContent>
+          <textarea pInputTextarea *ngIf="componentSecret != null"
+                    #publicKeyArea
+                    [ngModel]="componentSecret"
+                    [readonly]="true"
+                    [ngModelOptions]="{'standalone': true}"
+                    class="component-secret-area"
+          ></textarea>
+        </span>
+      </p-inplace>
+    </span>
+  </div>
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Public key url</label>
+    <span>
+        <input type="text" pInputText
+               [ngModel]="publicKeyUrl"
+               [readonly]="true"
+               [ngModelOptions]="{'standalone': true}"
+               class="component-public-key-url">
+    </span>
+  </div>
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Public key</label>
+    <span>
+      <p-inplace [closable]="true"
+                 (onActivate)="loadPublicKey()"
+      >
+        <span pInplaceDisplay>
+          Show
+        </span>
+        <span pInplaceContent>
+          <textarea pInputTextarea *ngIf="publicKey != null"
+                    #publicKeyArea
+                    [ngModel]="publicKey"
+                    [readonly]="true"
+                    [ngModelOptions]="{'standalone': true}"
+                    class="component-public-key"
+          ></textarea>
+        </span>
+      </p-inplace>
+    </span>
+  </div>
+
   <div class="actions">
     <input type="submit" hidden>
     <button type="button" pButton

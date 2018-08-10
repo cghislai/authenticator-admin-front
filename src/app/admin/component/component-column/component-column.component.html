@@ -6,6 +6,12 @@
     <i class="pi pi-times-circle inactive" *ngIf="!value.active"></i>
   </span>
 
+  <span *ngSwitchCase="'ENDPOINT_URL'" class="endpoint-url">
+    <auth-application-component-healthcheck [id]="value.id"
+    ></auth-application-component-healthcheck>
+    <span class="url">{{ value.endpointUrl }}</span>
+  </span>
+
   <span *ngSwitchDefault>
     {{ value[column.field] }}
   </span>

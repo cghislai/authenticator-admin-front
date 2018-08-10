@@ -41,7 +41,8 @@
     <span>
       <span *ngIf="value.componentId == null">None</span>
       <span *ngIf="value.componentId != null">
-        <!-- TODO: component display -->
+        <auth-application-component [id]="value.componentId"
+        ></auth-application-component>
       </span>
     </span>
   </div>
@@ -52,6 +53,29 @@
       {{ value.creationDateTime | date:'full' }}
     </span>
   </div>
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Public key</label>
+    <span>
+      <p-inplace [closable]="true"
+                 (onActivate)="loadPublicKey()"
+      >
+        <span pInplaceDisplay>
+          Show
+        </span>
+        <span pInplaceContent>
+          <textarea pInputTextarea *ngIf="publicKey != null"
+                    #publicKeyArea
+                    [ngModel]="publicKey"
+                    [readonly]="true"
+                    [ngModelOptions]="{'standalone': true}"
+                    class="public-key-area"
+          ></textarea>
+        </span>
+      </p-inplace>
+    </span>
+  </div>
+
 
   <div class="actions">
     <input type="submit" hidden>

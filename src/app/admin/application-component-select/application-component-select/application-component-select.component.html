@@ -1,0 +1,12 @@
+<span class="application-component-select">
+
+  <p-autoComplete [ngModel]="value"
+                  [suggestions]="suggestions"
+                  (ngModelChange)="onValueChange($event)"
+                  (completeMethod)="search($event)"
+                  [dropdown]="true"
+                  field="name"
+  ></p-autoComplete>
+
+
+</span>

@@ -16,7 +16,8 @@
   </span>
 
   <span *ngSwitchCase="'COMPONENT_ID'">
-      <!-- TODO: component display -->
+    <auth-application-component [id]="value.componentId"
+    ></auth-application-component>
   </span>
 
   <span *ngSwitchDefault>

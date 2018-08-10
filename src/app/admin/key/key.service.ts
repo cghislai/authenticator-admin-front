@@ -37,6 +37,18 @@ export class KeyService {
 
   }
 
+  loadPublicKey(key: WsKey): Observable<string> {
+    return this.httpClient.get(
+      `${this.backendUrl}/admin/key/${key.id}/public`, {
+        responseType: 'text',
+      }).pipe(
+      tap(null, (error) => this.messageService.add({
+        severity: 'error',
+        summary: 'Could not load public key',
+      })),
+    );
+  }
+
   createEmptyKey(): WsKey {
     return {
       id: null,

@@ -3,7 +3,7 @@ import {KeyFilter, Pagination, WsKey} from '@charlyghislain/core-web-api';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {KeyColumns} from '../key-column/key-columns';
 import {LazyLoadEvent} from 'primeng/api';
-import {delay, map, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
+import {debounceTime, delay, map, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
 import {ListResult} from '../../../domain/list-result';
 import {KeyService} from '../key.service';
 import {myThrottleTime} from '../../../utils/throttle-time';
@@ -30,6 +30,7 @@ export class KeyListComponent implements OnInit {
 
   ngOnInit() {
     const listResults: Observable<ListResult<WsKey>> = combineLatest(this.filter, this.pagination).pipe(
+      debounceTime(0),
       myThrottleTime(1000),
       switchMap(results => this.loadValues(results[0], results[1])),
       publishReplay(1), refCount(),

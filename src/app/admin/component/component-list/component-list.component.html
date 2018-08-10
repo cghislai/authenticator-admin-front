@@ -24,7 +24,8 @@
 
   <p-dialog header="Component edition"
             [visible]="editingComponent != null"
-            [closable]="false"
+            [closeOnEscape]="true"
+            (visibleChange)="onComponentEditCancel()"
             [modal]="true">
     <auth-component-form [ngModel]="editingComponent"
                          (ngModelChange)="onComponentEdited($event)"

@@ -3,7 +3,7 @@ import {ComponentFilter, Pagination, WsApplicationComponent} from '@charlyghisla
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {ComponentColumns} from '../component-column/component-columns';
 import {LazyLoadEvent} from 'primeng/api';
-import {delay, map, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
+import {debounceTime, delay, map, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
 import {ListResult} from '../../../domain/list-result';
 import {ComponentService} from '../component.service';
 import {myThrottleTime} from '../../../utils/throttle-time';
@@ -30,6 +30,7 @@ export class ComponentListComponent implements OnInit {
 
   ngOnInit() {
     const listResults: Observable<ListResult<WsApplicationComponent>> = combineLatest(this.filter, this.pagination).pipe(
+      debounceTime(0),
       myThrottleTime(1000),
       switchMap(results => this.loadvalues(results[0], results[1])),
       publishReplay(1), refCount(),

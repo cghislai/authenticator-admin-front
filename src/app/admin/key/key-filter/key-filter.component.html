@@ -23,19 +23,22 @@
     <span class="control">
       <p-triStateCheckbox [(ngModel)]="value.forApplicationSecrets"
                           label="For application secrets"
-                          name="for-application-secrets"
+                          name="forApplicationSecrets"
       ></p-triStateCheckbox>
     </span>
 
     <span class="control">
       <p-triStateCheckbox [(ngModel)]="value.forComponent"
                           label="For components"
-                          name="for-components"
+                          name="forComponent"
       ></p-triStateCheckbox>
     </span>
 
     <span class="control">
-      <!-- TODO: component select -->
+      <auth-application-component-select [ngModel]="value.componentId"
+                                         (ngModelChange)="value.componentId = $event== null ? null : $event.id"
+                                         name="componentId"
+      ></auth-application-component-select>
     </span>
   </div>
 

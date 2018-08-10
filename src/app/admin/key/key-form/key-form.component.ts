@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {WsKey} from '@charlyghislain/core-web-api';
+import {KeyService} from '../key.service';
 
 @Component({
   selector: 'auth-key-form',
@@ -17,13 +18,15 @@ export class KeyFormComponent implements OnInit, ControlValueAccessor {
   value: WsKey;
   disabled: boolean;
 
+  publicKey: string;
+
   @Output()
   cancel = new EventEmitter<any>();
 
   private onChangeFunction: Function;
   private onTouchedFunction: Function;
 
-  constructor() {
+  constructor(private keyService: KeyService) {
   }
 
   ngOnInit() {
@@ -45,6 +48,16 @@ export class KeyFormComponent implements OnInit, ControlValueAccessor {
     this.value = Object.assign({}, obj);
   }
 
+  loadPublicKey() {
+    if (this.value == null || this.value.id == null) {
+      this.publicKey = null;
+      return;
+    }
+    this.keyService.loadPublicKey(this.value)
+      .subscribe(publicKey => this.publicKey = publicKey,
+        () => this.publicKey = null);
+  }
+
   onSubmit() {
     this.onTouchedFunction();
     this.onChangeFunction(this.value);
@@ -53,4 +66,5 @@ export class KeyFormComponent implements OnInit, ControlValueAccessor {
   onCancel() {
     this.cancel.next(null);
   }
+
 }

@@ -24,7 +24,8 @@
 
   <p-dialog header="Component edition"
             [visible]="editingKey != null"
-            [closable]="false"
+            [closeOnEscape]="true"
+            (visibleChange)="onKeyEditCancel()"
             [modal]="true">
     <auth-key-form [ngModel]="editingKey"
                    (ngModelChange)="onKeyEdited($event)"

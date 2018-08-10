@@ -1,8 +1,9 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {TokenService} from './token.service';
 import {BACKEND_URL_TOKEN} from './configuration/backend-url-token';
-import {Observable} from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class TokenInterceptorService implements HttpInterceptor {
@@ -12,16 +13,11 @@ export class TokenInterceptorService implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.tokenService == null) {
-      console.error('no token service');
-      console.log(req);
-      return next.handle(req);
-    }
     if (!req.url.startsWith(this.backendUrl)) {
-      return next.handle(req);
+      return this.handleResponse(next, req);
     }
     if (!this.tokenService.hasValidToken()) {
-      return next.handle(req);
+      return this.handleResponse(next, req);
     }
     const token = this.tokenService.getToken();
     const authorizationHeader = `Bearer ${token}`;
@@ -30,8 +26,22 @@ export class TokenInterceptorService implements HttpInterceptor {
         'Authorization': authorizationHeader,
       },
     });
-    return next.handle(requestClone);
+    return this.handleResponse(next, requestClone);
   }
 
 
+  private handleResponse(next: HttpHandler, req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      catchError(error => this.handleHttpError(error)),
+    );
+  }
+
+  private handleHttpError(error: any) {
+    if (error instanceof HttpErrorResponse) {
+      if (error.status === 401) {
+        this.tokenService.clearToken();
+      }
+    }
+    return throwError(error);
+  }
 }
