@@ -1,13 +1,13 @@
 import {Inject, Injectable} from '@angular/core';
-import {BACKEND_URL_TOKEN} from '../../configuration/backend-url-token';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MessageService} from 'primeng/api';
-import {Pagination, UserFilter, WsUser} from '@charlyghislain/core-web-api';
 import {Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
-import {ListResult} from '../../domain/list-result';
+import {tap} from 'rxjs/operators';
+
 import {QueryParamsUtils} from '../../utils/query-params-utils';
-import {ListResultsUtils} from '../../utils/list-results-utils';
+import {ADMIN_API_URL_TOKEN} from '../../configuration/admin-api-url-token';
+import {WsPagination, WsResultList, WsUser, WsUserApplication, WsUserFilter} from '@charlyghislain/authenticator-admin-api';
+
 
 @Injectable({
   providedIn: 'root',
@@ -16,16 +16,15 @@ export class UserService {
 
   constructor(private httpClient: HttpClient,
               private messageService: MessageService,
-              @Inject(BACKEND_URL_TOKEN) private backendUrl: string) {
+              @Inject(ADMIN_API_URL_TOKEN) private backendUrl: string) {
   }
 
-  listUsers(filter: UserFilter, pagination: Pagination): Observable<ListResult<WsUser>> {
-    const queryParams = QueryParamsUtils.toQueryParams(filter, pagination);
-    return this.httpClient.get<WsUser[]>(
-      `${this.backendUrl}/admin/user/list`, {
+  listUsers(filter: WsUserFilter, wsPagination: WsPagination): Observable<WsResultList<WsUser>> {
+    const queryParams = QueryParamsUtils.toQueryParams(filter, wsPagination);
+    return this.httpClient.get<WsResultList<WsUser>>(
+      `${this.backendUrl}/user/list`, {
         params: queryParams,
-        observe: 'response',
-      }).pipe(map(response => ListResultsUtils.wrapResponse(response)));
+      });
   }
 
   saveUser(user: WsUser): Observable<WsUser> {
@@ -34,7 +33,46 @@ export class UserService {
     } else {
       return this.createUser(user);
     }
+  }
 
+  setUserPassword(user: WsUser, password: string): Observable<any> {
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'text/plain');
+    return this.httpClient.put(`${this.backendUrl}/user/${user.id}/password`, password, {
+      headers: headers,
+    }).pipe(
+      tap(
+        () => this.onSetPasswordSuccess(),
+        (error) => this.onSetPasswordError(error),
+      ),
+    );
+  }
+
+  listUserAplications(userId: number): Observable<WsResultList<WsUserApplication>> {
+    return this.httpClient.get<WsResultList<WsUserApplication>>(
+      `${this.backendUrl}/user/${userId}/application/list`);
+  }
+
+  setUserApplicationActive(userId: number, appId: number): Observable<WsUserApplication> {
+    return this.httpClient.put<WsUserApplication>(
+      `${this.backendUrl}/user/${userId}/application/${appId}/state/active`, null)
+      .pipe(
+        tap(
+          () => this.onSetUserApplicationActiveSuccess(),
+          (error) => this.onSetUserApplicationActiveError(error),
+        ),
+      );
+  }
+
+  setUserApplicationInactive(userId: number, appId: number): Observable<WsUserApplication> {
+    return this.httpClient.delete<WsUserApplication>(
+      `${this.backendUrl}/user/${userId}/application/${appId}/state/active`)
+      .pipe(
+        tap(
+          () => this.onSetUserApplicationActiveSuccess(),
+          (error) => this.onSetUserApplicationActiveError(error),
+        ),
+      );
   }
 
   createEmptyUser(): WsUser {
@@ -51,7 +89,7 @@ export class UserService {
 
   private createUser(user: WsUser): Observable<WsUser> {
     return this.httpClient.post<WsUser>(
-      `${this.backendUrl}/admin/user/`, user)
+      `${this.backendUrl}/user/`, user)
       .pipe(
         tap(
           () => this.onSaveSuccess(),
@@ -62,7 +100,7 @@ export class UserService {
 
   private updateUser(user: WsUser): Observable<WsUser> {
     return this.httpClient.put<WsUser>(
-      `${this.backendUrl}/admin/user/${user.id}`, user)
+      `${this.backendUrl}/user/${user.id}`, user)
       .pipe(
         tap(
           () => this.onSaveSuccess(),
@@ -82,6 +120,34 @@ export class UserService {
     this.messageService.add({
       severity: 'error',
       summary: 'User could not be saved',
+    });
+  }
+
+  private onSetPasswordSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Pasword updated',
+    });
+  }
+
+  private onSetPasswordError(error: any) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Password could not be updated',
+    });
+  }
+
+  private onSetUserApplicationActiveSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'User application updated',
+    });
+  }
+
+  private onSetUserApplicationActiveError(error: any) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'User applicatoin could not be updated',
     });
   }
 }

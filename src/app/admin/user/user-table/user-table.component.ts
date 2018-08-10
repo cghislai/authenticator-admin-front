@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Pagination, WsUser} from '@charlyghislain/core-web-api';
 import {UserColumns} from '../user-column/user-columns';
 import {LazyLoadEvent} from 'primeng/api';
+import {WsPagination, WsUser} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-user-table',
@@ -19,10 +19,10 @@ export class UserTableComponent implements OnInit {
   @Input()
   loading: boolean;
   @Input()
-  pagination: Pagination;
+  wsPagination: WsPagination;
 
   @Output()
-  paginationChange = new EventEmitter<LazyLoadEvent>();
+  wsPaginationChange = new EventEmitter<LazyLoadEvent>();
   @Output()
   rowClick = new EventEmitter<WsUser>();
 
@@ -32,8 +32,8 @@ export class UserTableComponent implements OnInit {
   ngOnInit() {
   }
 
-  onPaginationChange(event: LazyLoadEvent) {
-    this.paginationChange.next(event);
+  onWsPaginationChange(event: LazyLoadEvent) {
+    this.wsPaginationChange.next(event);
   }
 
   onRowClick(row: WsUser) {

@@ -1,17 +1,17 @@
-<form class="user-form auth-form" *ngIf="value != null"
+<form class="user-form auth-form" *ngIf="model?.user != null"
       #form="ngForm" (ngSubmit)="onSubmit()"
 >
 
-  <div class="row" *ngIf="value.id != null">
+  <div class="row" *ngIf="model.user.id != null">
     <label>Id</label>
-    <span>{{ value.id }}</span>
+    <span>{{ model.user.id }}</span>
   </div>
 
   <div class="row">
     <label>Name</label>
     <span>
       <input type="text" pInputText
-             [(ngModel)]="value.name"
+             [(ngModel)]="model.user.name"
              name="name"
              required
       >
@@ -22,8 +22,8 @@
     <label>Email</label>
     <span>
       <input type="text" pInputText
-             [(ngModel)]="value.email"
-             name="name"
+             [(ngModel)]="model.user.email"
+             name="email"
              required
       >
     </span>
@@ -32,7 +32,7 @@
   <div class="row">
     <label>Active</label>
     <span>
-      <p-inputSwitch [(ngModel)]="value.active"
+      <p-inputSwitch [(ngModel)]="model.user.active"
                      name="active"
       ></p-inputSwitch>
     </span>
@@ -41,27 +41,54 @@
   <div class="row">
     <label>Admin</label>
     <span>
-      <p-inputSwitch [(ngModel)]="value.admin"
+      <p-inputSwitch [(ngModel)]="model.user.admin"
                      name="admin"
       ></p-inputSwitch>
     </span>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="!model.newUser">
     <label>Email verified</label>
     <span>
-        <i class="pi pi-check-circle active" *ngIf="value.emailVerified"></i>
-        <i class="pi pi-times-circle inactive" *ngIf="!value.emailVerified"></i>
+        <p-inputSwitch [(ngModel)]="model.user.emailVerified"
+                       name="admin"
+        ></p-inputSwitch>
+    </span>
+  </div>
+
+  <div class="row" *ngIf="!model.newUser">
+    <label>Password expired</label>
+    <span>
+        <i class="pi pi-check-circle active" *ngIf="model.user.passwordExpired"></i>
+        <i class="pi pi-times-circle inactive" *ngIf="!model.user.passwordExpired"></i>
     </span>
   </div>
 
   <div class="row">
-    <label>Password expired</label>
+    <label>Password</label>
     <span>
-        <i class="pi pi-check-circle active" *ngIf="value.passwordExpired"></i>
-        <i class="pi pi-times-circle inactive" *ngIf="!value.passwordExpired"></i>
+        <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon">
+              <p-checkbox [(ngModel)]="model.updatePassword"
+                          name="update-password"
+              ></p-checkbox>
+            </span>
+            <input type="text" pInputText placeholder="New password"
+                   [disabled]="!model.updatePassword"
+                   [(ngModel)]="model.newPassword"
+                   name="new-password"
+            >
+        </div>
     </span>
   </div>
+
+  <div class="row" *ngIf="!model.newUser">
+    <label>Created</label>
+    <span>
+      {{ model.user.creationDateTime | moment }}
+    </span>
+  </div>
+
 
   <div class="actions">
     <input type="submit" hidden>

@@ -28,6 +28,16 @@
   </div>
 
   <div class="row">
+    <label>Signing key</label>
+    <span>
+      <p-checkbox [(ngModel)]="value.signingKey"
+                  label="Use this key to sign tokens from now on"
+                  [binary]="true" name="signingKey"
+      ></p-checkbox>
+    </span>
+  </div>
+
+  <div class="row">
     <label>Used for application secret</label>
     <span>
         <i class="pi pi-check-circle active" *ngIf="value.forApplicationSecrets"></i>
@@ -37,22 +47,15 @@
 
 
   <div class="row">
-    <label>Component scope</label>
+    <label>Application scope</label>
     <span>
-      <span *ngIf="value.componentId == null">None</span>
-      <span *ngIf="value.componentId != null">
-        <auth-application-component [id]="value.componentId"
-        ></auth-application-component>
-      </span>
+      <auth-application-select [(ngModel)]="value.applicationId"
+                               [disabled]="value.id != null"
+                               name="applicationId"
+      ></auth-application-select>
     </span>
   </div>
 
-  <div class="row">
-    <label>Created</label>
-    <span>
-      {{ value.creationDateTime | date:'full' }}
-    </span>
-  </div>
 
   <div class="row" *ngIf="value.id != null">
     <label>Public key</label>
@@ -69,13 +72,19 @@
                     [ngModel]="publicKey"
                     [readonly]="true"
                     [ngModelOptions]="{'standalone': true}"
-                    class="public-key-area"
+                    class="public-key-area token"
           ></textarea>
         </span>
       </p-inplace>
     </span>
   </div>
 
+  <div class="row" *ngIf="value.id != null">
+    <label>Created</label>
+    <span>
+      {{ value.creationDateTime | moment }}
+    </span>
+  </div>
 
   <div class="actions">
     <input type="submit" hidden>

@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Pagination, UserFilter, WsUser} from '@charlyghislain/core-web-api';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
 import {UserColumns} from '../user-column/user-columns';
 import {LazyLoadEvent} from 'primeng/api';
-import {debounceTime, delay, map, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
-import {ListResult} from '../../../domain/list-result';
+import {debounceTime, delay, map, mergeMap, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
 import {UserService} from '../user.service';
 import {myThrottleTime} from '../../../utils/throttle-time';
+import {UserFormModel} from '../domain/user-form-model';
+import {WsPagination, WsResultList, WsUser, WsUserFilter} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-user-list',
@@ -15,67 +15,68 @@ import {myThrottleTime} from '../../../utils/throttle-time';
 })
 export class UserListComponent implements OnInit {
 
-  filter = new BehaviorSubject<UserFilter>(this.createInitialFilter());
-  pagination = new BehaviorSubject<Pagination>(this.crateInitialPagination());
+  filter = new BehaviorSubject<WsUserFilter>(this.createInitialFilter());
+  wsPagination = new BehaviorSubject<WsPagination>(this.crateInitialWsPagination());
   columns = new BehaviorSubject<UserColumns.Column[]>(this.createInitialColumns());
 
   values: Observable<WsUser[]>;
   totalCount: Observable<number>;
   loading: boolean;
 
-  editingUser: WsUser;
+  editingUserFormModel: UserFormModel;
 
   constructor(private userService: UserService) {
   }
 
   ngOnInit() {
-    const listResults: Observable<ListResult<WsUser>> = combineLatest(this.filter, this.pagination).pipe(
+    const wsResultList: Observable<WsResultList<WsUser>> = combineLatest(this.filter, this.wsPagination).pipe(
       debounceTime(0),
       myThrottleTime(1000),
       switchMap(results => this.loadValues(results[0], results[1])),
       publishReplay(1), refCount(),
     );
-    this.values = listResults.pipe(map(results => results.values));
-    this.totalCount = listResults.pipe(map(results => results.totalCount));
+    this.values = wsResultList.pipe(map(results => results.results));
+    this.totalCount = wsResultList.pipe(map(results => results.totalCount));
   }
 
-  onFilterChange(value: UserFilter) {
+  onFilterChange(value: WsUserFilter) {
     this.filter.next(value);
   }
 
-  onPaginationChanged(event: LazyLoadEvent) {
-    const newPagination: Pagination = {
+  onWsPaginationChanged(event: LazyLoadEvent) {
+    const newWsPagination: WsPagination = {
       offset: event.first,
       length: event.rows,
     };
-    this.pagination.next(newPagination);
+    this.wsPagination.next(newWsPagination);
   }
 
   onNewUserClick() {
-    this.editingUser = this.userService.createEmptyUser();
+    const newUser = this.userService.createEmptyUser();
+    this.editingUserFormModel = this.createFormModel(newUser);
   }
 
-  onUserEdited(user: WsUser) {
-    this.userService.saveUser(user)
+  onUserEdited(model: UserFormModel) {
+    this.saveUserForm(model)
       .subscribe(() => {
-        this.editingUser = null;
+        this.editingUserFormModel = null;
         this.reload();
       });
   }
 
   onUserEditCancel() {
-    this.editingUser = null;
+    this.editingUserFormModel = null;
   }
 
   onUserSelected(value: WsUser) {
-    this.editingUser = value;
+    this.editingUserFormModel = this.createFormModel(value);
   }
 
-  private createInitialFilter(): UserFilter {
+  private createInitialFilter(): WsUserFilter {
     return {};
   }
 
-  private crateInitialPagination(): Pagination {
+  private crateInitialWsPagination(): WsPagination {
     return {
       offset: 0,
       length: 50,
@@ -91,12 +92,13 @@ export class UserListComponent implements OnInit {
       UserColumns.ADMIN,
       UserColumns.EMAIL_VERIFIED,
       UserColumns.PASSWORD_EXPIRED,
+      UserColumns.CREATION_DATE_TIME,
     ];
   }
 
-  private loadValues(filter: UserFilter, pagination: Pagination) {
+  private loadValues(filter: WsUserFilter, wsPagination: WsPagination) {
     this.loading = true;
-    return this.userService.listUsers(filter, pagination).pipe(
+    return this.userService.listUsers(filter, wsPagination).pipe(
       delay(0),
       tap(() => this.loading = false),
     );
@@ -104,5 +106,26 @@ export class UserListComponent implements OnInit {
 
   private reload() {
     this.filter.next(this.filter.getValue());
+  }
+
+  private createFormModel(user: WsUser): UserFormModel {
+    return {
+      user: user,
+      updatePassword: false,
+      newPassword: null,
+      newUser: user.id == null,
+    };
+  }
+
+  private saveUserForm(model: UserFormModel): Observable<WsUser> {
+    return this.userService.saveUser(model.user)
+      .pipe(mergeMap(user => this.setUserPassword(user, model)));
+  }
+
+  private setUserPassword(user: WsUser, form: UserFormModel) {
+    if (!form.updatePassword) {
+      return of(user);
+    }
+    return this.userService.setUserPassword(user, form.newPassword);
   }
 }

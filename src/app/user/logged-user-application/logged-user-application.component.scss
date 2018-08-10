@@ -1,0 +1,29 @@
+.user-application {
+  display: flex;
+  align-items: center;
+
+  >* {
+    flex: 1 1 auto;
+    display: inline-block;
+    margin: .3em;
+  }
+
+  > .actions {
+    flex: 0 0 auto;
+
+    >.action {
+      display: inline-block;
+      margin: 0 1em;
+      padding: .3em;
+
+      >i {
+        margin: 0 .3em;
+      }
+
+      &:hover {
+        cursor: pointer;
+        opacity: .7;
+      }
+    }
+  }
+}

@@ -1,0 +1,152 @@
+<form class="application-form auth-form" *ngIf="value != null"
+      #form="ngForm" (ngSubmit)="onSubmit()"
+>
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Id</label>
+    <span>{{ value.id }}</span>
+  </div>
+
+  <div class="row">
+    <label>Name</label>
+    <span>
+      <input type="text" pInputText
+             [(ngModel)]="value.name"
+             name="name"
+             required
+      >
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Active</label>
+    <span>
+      <p-inputSwitch [(ngModel)]="value.active"
+                     name="active"
+      ></p-inputSwitch>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>EndpointUrl</label>
+    <span>
+      <input type="url" pInputText
+             [(ngModel)]="value.endpointUrl"
+             name="url"
+             required>
+    </span>
+  </div>
+
+
+  <div class="row">
+    <label>Can reset user passwords</label>
+    <span>
+      <p-inputSwitch [(ngModel)]="value.canResetUserPassword"
+                     name="canResetUserPassword"
+      ></p-inputSwitch>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Can verify user email addresses</label>
+    <span>
+      <p-inputSwitch [(ngModel)]="value.canVerifyUserEmail"
+                     name="canVerifyUserEmail"
+      ></p-inputSwitch>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Added users are active</label>
+    <span>
+      <p-inputSwitch [(ngModel)]="value.addedUsersAreActive"
+                     name="addedUsersAreActive"
+      ></p-inputSwitch>
+    </span>
+  </div>
+
+  <div class="row">
+    <label>Existing users are added on token request</label>
+    <span>
+      <p-inputSwitch [(ngModel)]="value.existingUsersAreAddedOnTokenRequest"
+                     name="existingUsersAreAddedOnTokenRequest"
+      ></p-inputSwitch>
+    </span>
+  </div>
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Component secret</label>
+    <span>
+      <p-inplace [closable]="true"
+                 (onActivate)="createApplicationSecret()"
+      >
+        <span pInplaceDisplay>
+          Create secret
+        </span>
+        <span pInplaceContent>
+          <textarea pInputTextarea *ngIf="applicationSecret != null"
+                    #publicKeyArea
+                    [ngModel]="applicationSecret"
+                    [readonly]="true"
+                    [ngModelOptions]="{'standalone': true}"
+                    class="application-secret-area token"
+          ></textarea>
+        </span>
+      </p-inplace>
+    </span>
+  </div>
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Public key url</label>
+    <span>
+        <input type="text" pInputText
+               [ngModel]="publicKeyUrl"
+               [readonly]="true"
+               [ngModelOptions]="{'standalone': true}"
+               class="application-public-key-url">
+    </span>
+  </div>
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Public key</label>
+    <span>
+      <p-inplace [closable]="true"
+                 (onActivate)="loadPublicKey()"
+      >
+        <span pInplaceDisplay>
+          Show
+        </span>
+        <span pInplaceContent>
+          <textarea pInputTextarea *ngIf="publicKey != null"
+                    #publicKeyArea
+                    [ngModel]="publicKey"
+                    [readonly]="true"
+                    [ngModelOptions]="{'standalone': true}"
+                    class="application-public-key token"
+          ></textarea>
+        </span>
+      </p-inplace>
+    </span>
+  </div>
+
+
+  <div class="row" *ngIf="value.id != null">
+    <label>Created</label>
+    <span>
+      {{ value.creationDateTime | moment }}
+    </span>
+  </div>
+
+  <div class="actions">
+    <input type="submit" hidden>
+    <button type="button" pButton
+            label="Cancel"
+            class="ui-button-secondary"
+            (click)="onCancel()"></button>
+    <button type="button" pButton
+            label="Submit"
+            [disabled]="form.invalid"
+            (click)="onSubmit()"></button>
+  </div>
+
+</form>

@@ -1,13 +1,13 @@
 import {Inject, Injectable} from '@angular/core';
-import {BACKEND_URL_TOKEN} from '../../configuration/backend-url-token';
 import {HttpClient} from '@angular/common/http';
 import {MessageService} from 'primeng/api';
-import {KeyFilter, Pagination, WsKey} from '@charlyghislain/core-web-api';
 import {Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
-import {ListResult} from '../../domain/list-result';
+import {tap} from 'rxjs/operators';
+
 import {QueryParamsUtils} from '../../utils/query-params-utils';
-import {ListResultsUtils} from '../../utils/list-results-utils';
+import {WsKey, WsKeyFilter, WsPagination, WsResultList} from '@charlyghislain/authenticator-admin-api';
+import {ADMIN_API_URL_TOKEN} from '../../configuration/admin-api-url-token';
+
 
 @Injectable({
   providedIn: 'root',
@@ -16,16 +16,15 @@ export class KeyService {
 
   constructor(private httpClient: HttpClient,
               private messageService: MessageService,
-              @Inject(BACKEND_URL_TOKEN) private backendUrl: string) {
+              @Inject(ADMIN_API_URL_TOKEN) private backendUrl: string) {
   }
 
-  listKeys(filter: KeyFilter, pagination: Pagination): Observable<ListResult<WsKey>> {
-    const queryParams = QueryParamsUtils.toQueryParams(filter, pagination);
-    return this.httpClient.get<WsKey[]>(
-      `${this.backendUrl}/admin/key/list`, {
+  listKeys(filter: WsKeyFilter, wsPagination: WsPagination): Observable<WsResultList<WsKey>> {
+    const queryParams = QueryParamsUtils.toQueryParams(filter, wsPagination);
+    return this.httpClient.get<WsResultList<WsKey>>(
+      `${this.backendUrl}/key/list`, {
         params: queryParams,
-        observe: 'response',
-      }).pipe(map(response => ListResultsUtils.wrapResponse(response)));
+      });
   }
 
   saveKey(key: WsKey): Observable<WsKey> {
@@ -39,7 +38,7 @@ export class KeyService {
 
   loadPublicKey(key: WsKey): Observable<string> {
     return this.httpClient.get(
-      `${this.backendUrl}/admin/key/${key.id}/public`, {
+      `${this.backendUrl}/key/${key.id}/public`, {
         responseType: 'text',
       }).pipe(
       tap(null, (error) => this.messageService.add({
@@ -56,13 +55,14 @@ export class KeyService {
       active: true,
       forApplicationSecrets: false,
       creationDateTime: null,
-      componentId: null,
+      applicationId: null,
+      signingKey: true,
     };
   }
 
   private createKey(key: WsKey): Observable<WsKey> {
     return this.httpClient.post<WsKey>(
-      `${this.backendUrl}/admin/key/`, key)
+      `${this.backendUrl}/key/`, key)
       .pipe(
         tap(
           () => this.onSaveSuccess(),
@@ -73,7 +73,7 @@ export class KeyService {
 
   private updateKey(key: WsKey): Observable<WsKey> {
     return this.httpClient.put<WsKey>(
-      `${this.backendUrl}/admin/key/${key.id}`, key)
+      `${this.backendUrl}/key/${key.id}`, key)
       .pipe(
         tap(
           () => this.onSaveSuccess(),

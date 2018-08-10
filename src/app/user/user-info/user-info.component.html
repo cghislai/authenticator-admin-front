@@ -3,10 +3,26 @@
     <header>
       {{ name | async }}
     </header>
-    <p>
-      Here is the information we hold about you
-    </p>
-    <auth-user-info-form [user]="user | async"
-    ></auth-user-info-form>
+
+    <div class="content-row">
+      <div class="col">
+        <p>
+          Here is the information we hold about you
+        </p>
+        <auth-user-info-form [user]="user | async"
+        ></auth-user-info-form>
+      </div>
+
+      <div class="col">
+        <p>
+          In addition, this account is linked to the following applications, which may hold
+          additional information on your subject.
+        </p>
+        <auth-logged-user-application-list header="Applications linked to this account"
+                                           [editable]="true"
+        ></auth-logged-user-application-list>
+      </div>
+    </div>
   </div>
+
 </div>

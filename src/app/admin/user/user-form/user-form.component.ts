@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {WsUser} from '@charlyghislain/core-web-api';
+import {UserFormModel} from '../domain/user-form-model';
 
 @Component({
   selector: 'auth-user-form',
@@ -14,7 +14,7 @@ import {WsUser} from '@charlyghislain/core-web-api';
 })
 export class UserFormComponent implements OnInit, ControlValueAccessor {
 
-  value: WsUser;
+  model: UserFormModel;
   disabled: boolean;
 
   @Output()
@@ -42,12 +42,12 @@ export class UserFormComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    this.value = Object.assign({}, obj);
+    this.model = Object.assign({}, obj);
   }
 
   onSubmit() {
     this.onTouchedFunction();
-    this.onChangeFunction(this.value);
+    this.onChangeFunction(this.model);
   }
 
   onCancel() {

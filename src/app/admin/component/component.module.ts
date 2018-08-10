@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 
 import {ComponentRoutingModule} from './component-routing.module';
 import {ComponentListComponent} from './component-list/component-list.component';
-import {ComponentFilterComponent} from './component-filter/component-filter.component';
+import {WsComponentFilterComponent} from './component-filter/component-filter.component';
 import {ComponentTableComponent} from './component-table/component-table.component';
 import {FormsModule} from '@angular/forms';
 import {
@@ -39,7 +39,7 @@ import {ApplicationComponentHealthcheckModule} from '../application-component-he
   ],
   declarations: [
     ComponentListComponent,
-    ComponentFilterComponent,
+    WsComponentFilterComponent,
     ComponentTableComponent,
     ComponentColumnComponent,
     ComponentFormComponent,

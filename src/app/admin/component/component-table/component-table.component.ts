@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Pagination, WsApplicationComponent} from '@charlyghislain/core-web-api';
+import {WsPagination, WsApplicationComponent} from '@charlyghislain/core-web-api';
 import {ComponentColumns} from '../component-column/component-columns';
 import {LazyLoadEvent} from 'primeng/api';
 
@@ -19,10 +19,10 @@ export class ComponentTableComponent implements OnInit {
   @Input()
   loading: boolean;
   @Input()
-  pagination: Pagination;
+  wsPagination: WsPagination;
 
   @Output()
-  paginationChange = new EventEmitter<LazyLoadEvent>();
+  wsPaginationChange = new EventEmitter<LazyLoadEvent>();
   @Output()
   rowClick = new EventEmitter<WsApplicationComponent>();
 
@@ -32,8 +32,8 @@ export class ComponentTableComponent implements OnInit {
   ngOnInit() {
   }
 
-  onPaginationChange(event: LazyLoadEvent) {
-    this.paginationChange.next(event);
+  onWsPaginationChange(event: LazyLoadEvent) {
+    this.wsPaginationChange.next(event);
   }
 
   onRowClick(row: WsApplicationComponent) {

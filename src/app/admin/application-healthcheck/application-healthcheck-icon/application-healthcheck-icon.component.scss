@@ -1,0 +1,27 @@
+i:not([hidden]) {
+  display: inline-block;
+
+  &:hover {
+    opacity: .8;
+  }
+
+  &.checking {
+    opacity: .8;
+    color: lightgray;
+  }
+
+  &.reachable {
+    color: darkorange;
+
+    &.component-healthy.authorization-healthy {
+      color: darkgreen;
+    }
+  }
+  &.unreachable {
+    color: darkred;
+  }
+}
+
+[hidden] {
+  display: none;
+}

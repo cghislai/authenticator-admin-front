@@ -10,11 +10,11 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'component',
+        redirectTo: 'application',
       },
       {
-        path: 'component',
-        loadChildren: './component/component.module#ComponentModule',
+        path: 'application',
+        loadChildren: './application/application.module#ApplicationModule',
       },
       {
         path: 'user',

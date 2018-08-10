@@ -6,18 +6,23 @@
     <i class="pi pi-times-circle inactive" *ngIf="!value.active"></i>
   </span>
 
+  <span *ngSwitchCase="'SIGNING_KEY'">
+    <i class="pi pi-check-circle active" *ngIf="value.signingKey"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.signingKey"></i>
+  </span>
+
   <span *ngSwitchCase="'FOR_APPLICATION_SECRETS'">
     <i class="pi pi-check-circle active" *ngIf="value.forApplicationSecrets"></i>
     <i class="pi pi-times-circle inactive" *ngIf="!value.forApplicationSecrets"></i>
   </span>
 
   <span *ngSwitchCase="'CREATION_DATE_TIME'">
-    {{ value.creationDateTime | date:'long' }}
+    {{ value.creationDateTime | moment }}
   </span>
 
-  <span *ngSwitchCase="'COMPONENT_ID'">
-    <auth-application-component [id]="value.componentId"
-    ></auth-application-component>
+  <span *ngSwitchCase="'APPLICATION_ID'">
+    <auth-application [id]="value.applicationId"
+    ></auth-application>
   </span>
 
   <span *ngSwitchDefault>

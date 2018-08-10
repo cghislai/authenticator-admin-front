@@ -8,6 +8,10 @@ import {HttpClientModule} from '@angular/common/http';
 import {ButtonModule, InplaceModule, InputTextModule, PasswordModule} from 'primeng/primeng';
 import {UserAreaComponent} from './user-area/user-area.component';
 import {UserAreaRoutingModule} from './user-area-routing.module';
+import {LoggedUserApplicationComponent} from './logged-user-application/logged-user-application.component';
+import {LoggedUserApplicationListComponent} from './logged-user-application-list/logged-user-application-list.component';
+import {DataViewModule} from 'primeng/dataview';
+import {ToastModule} from 'primeng/toast';
 
 @NgModule({
   imports: [
@@ -16,6 +20,8 @@ import {UserAreaRoutingModule} from './user-area-routing.module';
     FormsModule,
     HttpClientModule,
 
+    ToastModule,
+    DataViewModule,
     InputTextModule,
     PasswordModule,
     ButtonModule,
@@ -25,6 +31,9 @@ import {UserAreaRoutingModule} from './user-area-routing.module';
     UserInfoComponent,
     UserInfoFormComponent,
     UserAreaComponent,
+
+    LoggedUserApplicationComponent,
+    LoggedUserApplicationListComponent,
   ],
 })
 export class UserAreaModule {

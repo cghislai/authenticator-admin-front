@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TokenService} from '../token.service';
-import {WsUser} from '@charlyghislain/core-web-api';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LoggedUserService} from '../logged-user.service';
 import {Subscription} from 'rxjs';
 import {filter, map, take} from 'rxjs/operators';
 import {RouteConstants} from '../utils/routes-constants';
+import {WsUser} from '@charlyghislain/authenticator-api';
 
 @Component({
   selector: 'auth-login',

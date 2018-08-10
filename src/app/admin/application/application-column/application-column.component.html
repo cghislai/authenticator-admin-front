@@ -1,0 +1,39 @@
+<span [ngSwitch]="column.type"
+      *ngIf="value != null"
+>
+  <span *ngSwitchCase="'ACTIVE'">
+    <i class="pi pi-check-circle active" *ngIf="value.active"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.active"></i>
+  </span>
+  <span *ngSwitchCase="'CAN_RESET_USER_PASSWORD'">
+    <i class="pi pi-check-circle active" *ngIf="value.canResetUserPassword"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.canResetUserPassword"></i>
+  </span>
+  <span *ngSwitchCase="'CAN_VERIFY_USER_EMAIL'">
+    <i class="pi pi-check-circle active" *ngIf="value.canVerifyUserEmail"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.canVerifyUserEmail"></i>
+  </span>
+  <span *ngSwitchCase="'ADDED_USERS_ARE_ACTIVE'">
+    <i class="pi pi-check-circle active" *ngIf="value.addedUsersAreActive"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.addedUsersAreActive"></i>
+  </span>
+  <span *ngSwitchCase="'USERS_ARE_ADDED_ON_TOKEN_REQUEST'">
+    <i class="pi pi-check-circle active" *ngIf="value.existingUsersAreAddedOnTokenRequest"></i>
+    <i class="pi pi-times-circle inactive" *ngIf="!value.existingUsersAreAddedOnTokenRequest"></i>
+  </span>
+
+  <span *ngSwitchCase="'ENDPOINT_URL'" class="endpoint-url">
+    <auth-application-healthcheck [id]="value.id"
+    ></auth-application-healthcheck>
+    <span class="url">{{ value.endpointUrl }}</span>
+  </span>
+
+  <span *ngSwitchCase="'CREATION_DATE_TIME'" class="endpoint-url">
+    <span class="date">{{ value.creationDateTime | moment }}</span>
+  </span>
+
+  <span *ngSwitchDefault>
+    {{ value[column.field] }}
+  </span>
+
+</span>

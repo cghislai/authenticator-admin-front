@@ -1,0 +1,14 @@
+.user-application {
+  display: flex;
+  align-items: center;
+
+  >* {
+    flex: 1 1 auto;
+    display: inline-block;
+    margin: .3em;
+  }
+
+  > .active {
+    flex: 0 0 auto;
+  }
+}

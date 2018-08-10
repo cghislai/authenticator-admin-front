@@ -1,0 +1,21 @@
+<div class="user-application-list">
+  <p-dataView [value]="userApplications | async"
+              emptyMessage="None"
+              [totalRecords]="totalCount | async"
+              layout="list"
+  >
+    <p-header>
+      {{ header }}
+    </p-header>
+
+    <ng-template let-item pTemplate="listItem">
+      <div>
+        <auth-user-application [userApplication]="item"
+                               [editable]="editable"
+                               (activeChange)="onActiveChanged(item, $event)"
+        ></auth-user-application>
+      </div>
+    </ng-template>
+
+  </p-dataView>
+</div>

@@ -18,6 +18,10 @@
     <i class="pi pi-times-circle inactive" *ngIf="!value.passwordExpired"></i>
   </span>
 
+  <span *ngSwitchCase="'CREATION_DATE_TIME'">
+    {{ value.creationDateTime | moment }}
+  </span>
+
   <span *ngSwitchDefault>
     {{ value[column.field] }}
   </span>

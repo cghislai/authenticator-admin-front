@@ -1,6 +1,8 @@
+@import "~src/app/shared/styles/variables";
+
 .header {
-  background-color: dodgerblue;
-  color: white;
+  background-color: $primaryBackground;
+  color: $primaryForeground;
 
   display: flex;
   align-items: stretch;
@@ -18,10 +20,11 @@
   > a {
     padding: .3em .5em;
 
-    color: white;
+    color: $primaryLinkForeground;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.3);
+      background-color: $primaryLinkHoverBackground;
+      color: $primaryLinkHoverForeground;
       cursor: pointer;
     }
   }

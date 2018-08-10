@@ -1,0 +1,23 @@
+.application-filter {
+  > .content {
+    margin: .5em;
+    display: inline-flex;
+    align-items: center;
+
+    > .control, > .actions {
+      flex: 0 0 auto;
+      margin: .5em 1em;
+    }
+
+    > .control {
+      display: inline-flex;
+      align-items: center;
+      > * {
+        flex: 0 0 auto;
+        display: inline-block;
+        margin: .3em;
+      }
+    }
+  }
+
+}

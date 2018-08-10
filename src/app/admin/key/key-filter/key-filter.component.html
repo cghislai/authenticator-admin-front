@@ -28,17 +28,16 @@
     </span>
 
     <span class="control">
-      <p-triStateCheckbox [(ngModel)]="value.forComponent"
-                          label="For components"
-                          name="forComponent"
+      <p-triStateCheckbox [(ngModel)]="value.forApplication"
+                          label="For applications"
+                          name="forApplication"
       ></p-triStateCheckbox>
     </span>
 
     <span class="control">
-      <auth-application-component-select [ngModel]="value.componentId"
-                                         (ngModelChange)="value.componentId = $event== null ? null : $event.id"
-                                         name="componentId"
-      ></auth-application-component-select>
+      <auth-application-select [(ngModel)]="value.applicationId"
+                               name="applicationId"
+      ></auth-application-select>
     </span>
   </div>
 

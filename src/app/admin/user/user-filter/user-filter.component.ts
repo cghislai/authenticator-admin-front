@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgForm} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {UserFilter} from '@charlyghislain/core-web-api';
+import {WsUserFilter} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-user-filter',
@@ -9,13 +9,13 @@ import {UserFilter} from '@charlyghislain/core-web-api';
   styleUrls: ['./user-filter.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: UserFilterComponent,
+    useExisting: WsUserFilterComponent,
     multi: true,
   }],
 })
-export class UserFilterComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class WsUserFilterComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
-  value: UserFilter;
+  value: WsUserFilter;
   disabled: boolean;
 
   private onChangeFunction: Function;
@@ -52,7 +52,7 @@ export class UserFilterComponent implements OnInit, OnDestroy, ControlValueAcces
     this.value = Object.assign({}, obj);
   }
 
-  private fireChanges(value: UserFilter) {
+  private fireChanges(value: WsUserFilter) {
     this.onTouchedFunction();
     this.onChangeFunction(value);
   }

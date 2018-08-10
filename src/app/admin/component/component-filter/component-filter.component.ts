@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgForm} from '@angular/forms';
-import {ComponentFilter} from '@charlyghislain/core-web-api';
+import {WsComponentFilter} from '@charlyghislain/core-web-api';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -9,13 +9,13 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./component-filter.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: ComponentFilterComponent,
+    useExisting: WsComponentFilterComponent,
     multi: true,
   }],
 })
-export class ComponentFilterComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class WsComponentFilterComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
-  value: ComponentFilter;
+  value: WsComponentFilter;
   disabled: boolean;
 
   private onChangeFunction: Function;
@@ -52,7 +52,7 @@ export class ComponentFilterComponent implements OnInit, OnDestroy, ControlValue
     this.value = Object.assign({}, obj);
   }
 
-  private fireChanges(value: ComponentFilter) {
+  private fireChanges(value: WsComponentFilter) {
     this.onTouchedFunction();
     this.onChangeFunction(value);
   }

@@ -2,12 +2,18 @@ import {Inject, Injectable} from '@angular/core';
 import {BACKEND_URL_TOKEN} from '../../configuration/backend-url-token';
 import {HttpClient} from '@angular/common/http';
 import {MessageService} from 'primeng/api';
-import {ComponentFilter, Pagination, WsApplicationComponent, WsApplicationComponentHealth} from '@charlyghislain/core-web-api';
+import {
+  WsApplicationComponent,
+  WsApplicationComponentHealth,
+  WsComponentFilter,
+  WsPagination,
+  WsResultList,
+} from '@charlyghislain/core-web-api';
 import {Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
-import {ListResult} from '../../domain/list-result';
+import {tap} from 'rxjs/operators';
+
 import {QueryParamsUtils} from '../../utils/query-params-utils';
-import {ListResultsUtils} from '../../utils/list-results-utils';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,15 +25,13 @@ export class ComponentService {
               @Inject(BACKEND_URL_TOKEN) private backendUrl: string) {
   }
 
-  listComponents(filter: ComponentFilter, pagination: Pagination): Observable<ListResult<WsApplicationComponent>> {
-    const queryParams = QueryParamsUtils.toQueryParams(filter, pagination);
-    return this.httpClient.get<WsApplicationComponent[]>(
+  listComponents(filter: WsComponentFilter, wsPagination: WsPagination): Observable<WsResultList<WsApplicationComponent>> {
+    const queryParams = QueryParamsUtils.toQueryParams(filter, wsPagination);
+    return this.httpClient.get<WsResultList<WsApplicationComponent>>(
       `${this.backendUrl}/admin/component/list`, {
         params: queryParams,
-        observe: 'response',
-      }).pipe(map(response => ListResultsUtils.wrapResponse(response)));
+      });
   }
-
 
   getComponent(id: number): Observable<WsApplicationComponent> {
     return this.httpClient.get<WsApplicationComponent>(

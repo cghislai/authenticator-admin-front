@@ -1,15 +1,15 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {TokenService} from './token.service';
-import {BACKEND_URL_TOKEN} from './configuration/backend-url-token';
-import {Observable, of, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {API_URL_TOKEN} from './configuration/api-url-token';
 
 @Injectable()
 export class TokenInterceptorService implements HttpInterceptor {
 
   constructor(private tokenService: TokenService,
-              @Inject(BACKEND_URL_TOKEN) private backendUrl: string) {
+              @Inject(API_URL_TOKEN) private backendUrl: string) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

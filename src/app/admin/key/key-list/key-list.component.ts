@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {KeyFilter, Pagination, WsKey} from '@charlyghislain/core-web-api';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {KeyColumns} from '../key-column/key-columns';
 import {LazyLoadEvent} from 'primeng/api';
 import {debounceTime, delay, map, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
-import {ListResult} from '../../../domain/list-result';
+
 import {KeyService} from '../key.service';
 import {myThrottleTime} from '../../../utils/throttle-time';
+import {WsKey, WsKeyFilter, WsPagination, WsResultList} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-key-list',
@@ -15,8 +15,8 @@ import {myThrottleTime} from '../../../utils/throttle-time';
 })
 export class KeyListComponent implements OnInit {
 
-  filter = new BehaviorSubject<KeyFilter>(this.createInitialFilter());
-  pagination = new BehaviorSubject<Pagination>(this.crateInitialPagination());
+  filter = new BehaviorSubject<WsKeyFilter>(this.createInitialFilter());
+  wsPagination = new BehaviorSubject<WsPagination>(this.crateInitialWsPagination());
   columns = new BehaviorSubject<KeyColumns.Column[]>(this.createInitialColumns());
 
   values: Observable<WsKey[]>;
@@ -29,26 +29,26 @@ export class KeyListComponent implements OnInit {
   }
 
   ngOnInit() {
-    const listResults: Observable<ListResult<WsKey>> = combineLatest(this.filter, this.pagination).pipe(
+    const wsResultLists: Observable<WsResultList<WsKey>> = combineLatest(this.filter, this.wsPagination).pipe(
       debounceTime(0),
       myThrottleTime(1000),
       switchMap(results => this.loadValues(results[0], results[1])),
       publishReplay(1), refCount(),
     );
-    this.values = listResults.pipe(map(results => results.values));
-    this.totalCount = listResults.pipe(map(results => results.totalCount));
+    this.values = wsResultLists.pipe(map(results => results.results));
+    this.totalCount = wsResultLists.pipe(map(results => results.totalCount));
   }
 
-  onFilterChange(value: KeyFilter) {
+  onFilterChange(value: WsKeyFilter) {
     this.filter.next(value);
   }
 
-  onPaginationChanged(event: LazyLoadEvent) {
-    const newPagination: Pagination = {
+  onWsPaginationChanged(event: LazyLoadEvent) {
+    const newWsPagination: WsPagination = {
       offset: event.first,
       length: event.rows,
     };
-    this.pagination.next(newPagination);
+    this.wsPagination.next(newWsPagination);
   }
 
   onNewKeyClick() {
@@ -71,11 +71,11 @@ export class KeyListComponent implements OnInit {
     this.editingKey = value;
   }
 
-  private createInitialFilter(): KeyFilter {
+  private createInitialFilter(): WsKeyFilter {
     return {};
   }
 
-  private crateInitialPagination(): Pagination {
+  private crateInitialWsPagination(): WsPagination {
     return {
       offset: 0,
       length: 50,
@@ -87,15 +87,16 @@ export class KeyListComponent implements OnInit {
       KeyColumns.ID,
       KeyColumns.NAME,
       KeyColumns.ACTIVE,
+      KeyColumns.SIGNING_KEY,
       KeyColumns.FOR_APPLICATION_SECRETS,
-      KeyColumns.COMPONENT_ID,
+      KeyColumns.APPLICATION_ID,
       KeyColumns.CREATION_DATE_TIME,
     ];
   }
 
-  private loadValues(filter: KeyFilter, pagination: Pagination) {
+  private loadValues(filter: WsKeyFilter, wsPagination: WsPagination) {
     this.loading = true;
-    return this.keyService.listKeys(filter, pagination).pipe(
+    return this.keyService.listKeys(filter, wsPagination).pipe(
       delay(0),
       tap(() => this.loading = false),
     );

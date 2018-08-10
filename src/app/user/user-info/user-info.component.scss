@@ -3,12 +3,28 @@
 
   .content {
     display: inline-block;
-    max-width: 30em;
   }
 
   header {
     font-size: large;
   }
 
+  .content-row {
+    display: inline-flex;
+    align-items: stretch;
+    margin-top: 1em;
+    text-align: initial;
+
+    >* {
+      flex: 1 1 40em;
+      margin: 0 1em;
+
+      >p {
+        text-align: center;
+        margin-bottom: 1em;
+        opacity: .8;
+      }
+    }
+  }
 
 }

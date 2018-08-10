@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserColumns} from './user-columns';
-import {WsUser} from '@charlyghislain/core-web-api';
+import {WsUser} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-user-column',

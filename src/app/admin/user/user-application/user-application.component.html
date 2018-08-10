@@ -1,0 +1,23 @@
+<div class="user-application" *ngIf="userApplication != null">
+
+  <span *ngIf="showActive" class="active">
+    <span *ngIf="!editable">
+      <i class="pi pi-check-circle active" *ngIf="userApplication.active"></i>
+      <i class="pi pi-times-circle inactive" *ngIf="!userApplication.active"></i>
+    </span>
+    <span *ngIf="editable">
+      <p-inputSwitch [ngModel]="userApplication.active"
+                     (ngModelChange)="onActiveChanged($event)"
+      ></p-inputSwitch>
+    </span>
+  </span>
+
+  <span *ngIf="showUser" class="user">
+    <span>{{ userApplication.userName }}</span>
+  </span>
+
+  <span *ngIf="showApplication" class="app">
+    <span>{{ userApplication.applicationName }}</span>
+  </span>
+
+</div>

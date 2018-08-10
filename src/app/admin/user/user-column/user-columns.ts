@@ -52,5 +52,11 @@ export namespace UserColumns {
     header: 'Password expired',
   };
 
+  export const CREATION_DATE_TIME: Column = {
+    type: UserColumn.CREATION_DATE_TIME,
+    field: 'creationDateTime ',
+    header: 'Created',
+  };
+
 
 }

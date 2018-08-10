@@ -17,8 +17,8 @@
                         [totalCount]="totalCount | async"
                         [columns]="columns | async"
                         [loading]="loading"
-                        [pagination]="pagination | async"
-                        (paginationChange)="onPaginationChanged($event)"
+                        [wsPagination]="wsPagination | async"
+                        (wsPaginationChange)="onWsPaginationChanged($event)"
                         (rowClick)="onComponentSelected($event)"
   ></auth-component-table>
 

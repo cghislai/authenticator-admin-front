@@ -3,11 +3,11 @@ import {CommonModule} from '@angular/common';
 
 import {KeyRoutingModule} from './key-routing.module';
 import {KeyListComponent} from './key-list/key-list.component';
-import {KeyFilterComponent} from './key-filter/key-filter.component';
+import {WsKeyFilterComponent} from './key-filter/key-filter.component';
 import {KeyTableComponent} from './key-table/key-table.component';
 import {FormsModule} from '@angular/forms';
 import {
-  ButtonModule,
+  ButtonModule, CheckboxModule,
   DialogModule,
   InplaceModule,
   InputSwitchModule,
@@ -18,8 +18,9 @@ import {
 import {TableModule} from 'primeng/table';
 import {KeyColumnComponent} from './key-column/key-column.component';
 import {KeyFormComponent} from './key-form/key-form.component';
-import {ApplicationComponentModule} from '../application-component/application-component.module';
-import {ApplicationComponentSelectModule} from '../application-component-select/application-component-select.module';
+import {ApplicationSelectModule} from '../../shared/application-select/application-select.module';
+import {ApplicationModule} from '../../shared/application/application.module';
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -27,12 +28,14 @@ import {ApplicationComponentSelectModule} from '../application-component-select/
     KeyRoutingModule,
     FormsModule,
 
-    ApplicationComponentModule,
-    ApplicationComponentSelectModule,
+    ApplicationModule,
+    ApplicationSelectModule,
+    SharedModule,
 
     TriStateCheckboxModule,
     InputTextModule,
     ButtonModule,
+    CheckboxModule,
     TableModule,
     InputSwitchModule,
     DialogModule,
@@ -41,7 +44,7 @@ import {ApplicationComponentSelectModule} from '../application-component-select/
   ],
   declarations: [
     KeyListComponent,
-    KeyFilterComponent,
+    WsKeyFilterComponent,
     KeyTableComponent,
     KeyColumnComponent,
     KeyFormComponent,

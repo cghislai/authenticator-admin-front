@@ -1,3 +1,5 @@
+@import "~src/app/shared/styles/variables";
+
 .admin-area {
   display: flex;
   align-items: stretch;
@@ -10,8 +12,8 @@
     flex: 0 0 2em;
     font-size: large;
 
-    background-color: dodgerblue;
-    color: white;
+    background-color: $primaryBackground;
+    color: $primaryForeground;
 
 
     > a {
@@ -20,14 +22,15 @@
       text-align: center;
       padding: .3em;
 
-      color: white;
+      color: $primaryLinkForeground;
 
       &.active {
 
       }
 
       &:hover {
-        background-color: rgba(255, 255, 255, 0.3);
+        background-color: $primaryLinkHoverBackground;
+        color: $primaryLinkHoverForeground;
         cursor: pointer;
       }
     }

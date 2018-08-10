@@ -1,0 +1,14 @@
+<div class="user-application" *ngIf="userApplication != null">
+
+  <span class="app">
+    <span>{{ userApplication.applicationName }}</span>
+  </span>
+
+  <span class="actions" *ngIf="showActions">
+    <a (click)="onRemoveClicked()" class="remove action">
+      <i class="fa fa-times"></i>
+      <span>Remove</span>
+    </a>
+  </span>
+
+</div>

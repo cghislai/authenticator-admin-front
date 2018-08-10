@@ -1,0 +1,35 @@
+<div class="application-list ui-widget">
+
+  <header class="actions-header">
+    <h1>Applications</h1>
+    <span class="actions">
+      <button type="button" pButton
+              label="Create new application"
+              (click)="onNewApplicationClick()"></button>
+    </span>
+  </header>
+
+  <auth-application-filter [ngModel]="filter | async"
+                           (ngModelChange)="onFilterChange($event)"
+  ></auth-application-filter>
+
+  <auth-application-table [applications]="values | async"
+                          [totalCount]="totalCount | async"
+                          [columns]="columns | async"
+                          [loading]="loading"
+                          [wsPagination]="wsPagination | async"
+                          (wsPaginationChange)="onWsPaginationChanged($event)"
+                          (rowClick)="onApplicationSelected($event)"
+  ></auth-application-table>
+
+  <p-dialog header="Component edition"
+            [visible]="editingComponent != null"
+            [closeOnEscape]="true"
+            (visibleChange)="onApplicationEditCancel()"
+            [modal]="true">
+    <auth-application-form [ngModel]="editingComponent"
+                           (ngModelChange)="onApplicationEdited($event)"
+                           (cancel)="onApplicationEditCancel()"
+    ></auth-application-form>
+  </p-dialog>
+</div>

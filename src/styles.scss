@@ -4,19 +4,29 @@
 @import "~primeng/resources/primeng.min.css";
 @import "~font-awesome/css/font-awesome.min.css";
 //
-@import "assets/styles/forms";
-@import "assets/styles/action-header";
-@import "assets/styles/status-icon";
+@import "app/shared/styles/forms";
+@import "app/shared/styles/action-header";
+@import "app/shared/styles/status-icon";
+@import "app/shared/styles/token";
 
 body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 // FIX ppassword feedback=false
 .ui-password-panel {
   display: none;
+}
+
+.ui-inplace {
+  position: relative;
 }
 
 .ui-inplace .ui-inplace-display {
@@ -26,6 +36,8 @@ body {
 .ui-inplace .ui-inplace-content {
   display: flex;
   align-items: center;
+  position: absolute;
+  width: 100%;
 
   > * {
     flex: 1 1 auto;

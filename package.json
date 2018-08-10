@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port 4201",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -20,7 +20,8 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
-    "@charlyghislain/core-web-api": "file:../auth/auth-core/core-web/target/npm",
+    "@charlyghislain/authenticator-admin-api": "1.0.0-SNAPSHOT",
+    "@charlyghislain/authenticator-api": "1.0.0-SNAPSHOT",
     "core-js": "^2.5.4",
     "font-awesome": "^4.7.0",
     "moment-es6": "^1.0.0",

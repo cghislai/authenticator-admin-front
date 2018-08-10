@@ -17,20 +17,29 @@
                    [totalCount]="totalCount | async"
                    [columns]="columns | async"
                    [loading]="loading"
-                   [pagination]="pagination | async"
-                   (paginationChange)="onPaginationChanged($event)"
+                   [wsPagination]="wsPagination | async"
+                   (wsPaginationChange)="onWsPaginationChanged($event)"
                    (rowClick)="onUserSelected($event)"
   ></auth-user-table>
 
   <p-dialog header="Component edition"
-            [visible]="editingUser != null"
+            *ngIf="editingUserFormModel != null"
+            [visible]="true"
             [modal]="true"
             [closeOnEscape]="true"
             (visibleChange)="onUserEditCancel()"
   >
-    <auth-user-form [ngModel]="editingUser"
-                    (ngModelChange)="onUserEdited($event)"
-                    (cancel)="onUserEditCancel()"
-    ></auth-user-form>
+    <div class="row user-edit-row">
+      <auth-user-form [ngModel]="editingUserFormModel"
+                      (ngModelChange)="onUserEdited($event)"
+                      (cancel)="onUserEditCancel()"
+      ></auth-user-form>
+      <div *ngIf="!editingUserFormModel.newUser">
+        <auth-user-application-list [userId]="editingUserFormModel.user.id"
+                                    [editable]="true"
+                                    header="Linked applications"
+        ></auth-user-application-list>
+      </div>
+    </div>
   </p-dialog>
 </div>

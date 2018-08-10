@@ -38,10 +38,15 @@ export namespace KeyColumns {
     header: 'Created',
   };
 
-  export const COMPONENT_ID: Column = {
-    type: KeyColumn.COMPONENT_ID,
-    field: 'componentId ',
-    header: 'Component',
+  export const APPLICATION_ID: Column = {
+    type: KeyColumn.APPLICATION_ID,
+    field: 'applicationId ',
+    header: 'Application',
   };
 
+  export const SIGNING_KEY: Column = {
+    type: KeyColumn.SIGNING_KEY,
+    field: 'signingKey ',
+    header: 'Signing key',
+  };
 }

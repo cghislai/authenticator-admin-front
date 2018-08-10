@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {WsUser} from '@charlyghislain/core-web-api';
 import {LoggedUserService} from '../../logged-user.service';
+import {WsUser} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-user-info-form',
@@ -33,6 +33,9 @@ export class UserInfoFormComponent implements OnInit {
   }
 
   updatePassword() {
+    if (this.newPassword !== this.newPasswordConfirm) {
+      return;
+    }
     this.loggedUserService.updateUserPassword(this.newPassword);
   }
 }

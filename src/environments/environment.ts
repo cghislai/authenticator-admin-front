@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'https://localhost:8443',
+  authenticatorApiUrl: 'https://localhost:8443',
+  authenticatorAdminApiUrl: 'https://localhost:8443/admin',
 };
 
 /*

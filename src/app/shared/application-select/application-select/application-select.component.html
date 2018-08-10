@@ -1,0 +1,13 @@
+<span class="application-select">
+
+  <p-autoComplete [ngModel]="applicationValue | async"
+                  [suggestions]="suggestions"
+                  (ngModelChange)="onValueChange($event)"
+                  (completeMethod)="search($event)"
+                  [dropdown]="true"
+                  [disabled]="disabled"
+                  field="name"
+                  placeholder="None"
+  ></p-autoComplete>
+
+</span>

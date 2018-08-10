@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {merge, Observable, Subject} from 'rxjs';
 import {map, publishReplay, refCount} from 'rxjs/operators';
-import {WsUser} from '@charlyghislain/core-web-api';
 import {LoggedUserService} from '../../logged-user.service';
+import {WsUser} from '@charlyghislain/authenticator-api';
 
 @Component({
   selector: 'auth-user-info',

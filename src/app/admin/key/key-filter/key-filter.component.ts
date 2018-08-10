@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgForm} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {KeyFilter} from '@charlyghislain/core-web-api';
+import {WsKeyFilter} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-key-filter',
@@ -9,13 +9,13 @@ import {KeyFilter} from '@charlyghislain/core-web-api';
   styleUrls: ['./key-filter.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
-    useExisting: KeyFilterComponent,
+    useExisting: WsKeyFilterComponent,
     multi: true,
   }],
 })
-export class KeyFilterComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class WsKeyFilterComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
-  value: KeyFilter;
+  value: WsKeyFilter;
   disabled: boolean;
 
   private onChangeFunction: Function;
@@ -52,7 +52,7 @@ export class KeyFilterComponent implements OnInit, OnDestroy, ControlValueAccess
     this.value = Object.assign({}, obj);
   }
 
-  private fireChanges(value: KeyFilter) {
+  private fireChanges(value: WsKeyFilter) {
     this.onTouchedFunction();
     this.onChangeFunction(value);
   }

@@ -1,7 +1,11 @@
 <div class="header ui-widget">
 
-  <span class="title">
-    {{ providerName | async }}
+  <span class="title" *ngIf="(authenticatorName | async) != null">
+    {{ authenticatorName | async }}
+  </span>
+
+  <span class="title" *ngIf="(authenticatorName | async) == null">
+    Auth provider unreachable
   </span>
 
   <a [routerLink]="['/admin']"
@@ -11,7 +15,7 @@
 
   <span class="separator"></span>
 
-  <a [routerLink]="['/user']" >
+  <a [routerLink]="['/user']">
     {{ loggedUserName | async }}
   </a>
 

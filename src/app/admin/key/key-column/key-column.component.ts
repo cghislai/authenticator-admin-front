@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {KeyColumns} from './key-columns';
-import {WsKey} from '@charlyghislain/core-web-api';
+import {WsKey} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-key-column',

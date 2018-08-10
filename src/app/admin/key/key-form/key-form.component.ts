@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {WsKey} from '@charlyghislain/core-web-api';
 import {KeyService} from '../key.service';
+import {WsKey} from '@charlyghislain/authenticator-admin-api';
 
 @Component({
   selector: 'auth-key-form',

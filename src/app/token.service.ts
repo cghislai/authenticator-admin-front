@@ -1,12 +1,12 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, EMPTY, Observable, Subscription, timer} from 'rxjs';
-import {BACKEND_URL_TOKEN} from './configuration/backend-url-token';
 import {catchError, first, mergeMap, take, throwIfEmpty} from 'rxjs/operators';
 import {MessageService} from 'primeng/api';
-import {JosePayload} from './domain/JosePayload';
 import moment from 'moment-es6';
 import {Router} from '@angular/router';
+import {JosePayload} from '@charlyghislain/authenticator-api';
+import {API_URL_TOKEN} from './configuration/api-url-token';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,7 @@ export class TokenService {
   constructor(private httpClient: HttpClient,
               private messageService: MessageService,
               private router: Router,
-              @Inject(BACKEND_URL_TOKEN) private backendUrl: string) {
+              @Inject(API_URL_TOKEN) private backendUrl: string) {
     timer(100)
       .subscribe(() => this.loadTokenFromStorage());
   }
@@ -56,6 +56,10 @@ export class TokenService {
     this.setToken(null);
     this.unWatchTokenExpiration();
     this.router.navigate(['/']);
+  }
+
+  reemitToken() {
+    this.token.next(this.token.getValue());
   }
 
   private setToken(token: string) {
