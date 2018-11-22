@@ -34,7 +34,11 @@ pipeline {
               nodejs(nodeJSInstallationName: 'node 10', configId: 'npmrc-@charlyghislain') {  catchError {
                 ansiColor('xterm') {
                   sh '''
-                    ./node_modules/.bin/ng build
+                     export VERSION="$(./node_modules/.bin/json -f package.json version)"
+                     export CONFIG="production"
+                     echo "$VERSION" | grep "alpha|beta" && export CONFIG=''
+
+                    ./node_modules/.bin/ng build -c "$CONFIG"
                   '''
                 }
               }}}
