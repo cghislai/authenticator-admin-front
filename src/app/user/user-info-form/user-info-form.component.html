@@ -8,7 +8,7 @@
           <span pInplaceDisplay>
               {{ value.name }}
           </span>
-          <span pInplaceContent>
+          <span pInplaceContent class="inplace-absolute">
               <input type="text" pInputText
                      [(ngModel)]="value.name"
                      #nameInput autofocus
@@ -32,7 +32,7 @@
           <span pInplaceDisplay>
               {{ value.email }}
           </span>
-          <span pInplaceContent>
+          <span pInplaceContent class="inplace-absolute">
               <input type="text" pInputText
                      [(ngModel)]="value.email"
                      #emailInput autofocus
@@ -90,37 +90,39 @@
           <span pInplaceDisplay>
               Change password
           </span>
-        <form pInplaceContent #passwordForm="ngForm" (submit)="updatePassword()"
-              class="password-form">
-          <input type="password" pPassword
-                 [feedback]="false"
-                 [(ngModel)]="newPassword"
-                 placeholder="Password"
-                 autocomplete="false"
-                 name="password"
-                 #passwordInput autofocus
-                 required
-          >
-          <input type="password" pPassword
-                 [feedback]="false"
-                 [(ngModel)]="newPasswordConfirm"
-                 placeholder="Password confirmation"
-                 autocomplete="false"
-                 name="password-confirm"
-                 #passwordConfirmInput
-                 required
-          >
-          <input type="submit" hidden>
-          <a (click)="updatePassword()">
-            <i class="pi pi-check-circle"></i>
-            <span>Update password</span>
-          </a>
-          <a (click)="passwordInplace.deactivate($event)">
-            <i class="pi pi-times-circle"></i>
-            <span>Cancel</span>
-          </a>
-        </form>
-    </p-inplace>
+          <form pInplaceContent #passwordForm="ngForm" (submit)="updatePassword()"
+                class="password-form inplace-absolute">
+            <input type="password" pPassword
+                   [feedback]="false"
+                   [(ngModel)]="newPassword"
+                   placeholder="Password"
+                   autocomplete="false"
+                   name="password"
+                   #passwordInput autofocus
+                   required
+            >
+            <input type="password" pPassword
+                   [feedback]="false"
+                   [(ngModel)]="newPasswordConfirm"
+                   placeholder="Password confirmation"
+                   autocomplete="false"
+                   name="password-confirm"
+                   #passwordConfirmInput
+                   required
+            >
+            <div class="actions">
+              <input type="submit" hidden>
+              <a (click)="updatePassword()">
+                <i class="pi pi-check-circle"></i>
+                <span>Update password</span>
+              </a>
+              <a (click)="passwordInplace.deactivate($event)">
+                <i class="pi pi-times-circle"></i>
+                <span>Cancel</span>
+              </a>
+            </div>
+          </form>
+      </p-inplace>
     </span>
   </div>
 

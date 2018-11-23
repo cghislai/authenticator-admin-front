@@ -23,11 +23,11 @@
   ></auth-application-table>
 
   <p-dialog header="Component edition"
-            [visible]="editingComponent != null"
+            [visible]="editingApplication != null"
             [closeOnEscape]="true"
             (visibleChange)="onApplicationEditCancel()"
             [modal]="true">
-    <auth-application-form [ngModel]="editingComponent"
+    <auth-application-form [ngModel]="editingApplication"
                            (ngModelChange)="onApplicationEdited($event)"
                            (cancel)="onApplicationEditCancel()"
     ></auth-application-form>

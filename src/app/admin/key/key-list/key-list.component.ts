@@ -68,7 +68,7 @@ export class KeyListComponent implements OnInit {
   }
 
   onKeySelected(value: WsKey) {
-    this.editingKey = value;
+    this.editingKey = Object.assign({}, value);
   }
 
   private createInitialFilter(): WsKeyFilter {

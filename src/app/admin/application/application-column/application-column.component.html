@@ -23,9 +23,11 @@
   </span>
 
   <span *ngSwitchCase="'ENDPOINT_URL'" class="endpoint-url">
-    <auth-application-healthcheck [id]="value.id"
-    ></auth-application-healthcheck>
-    <span class="url">{{ value.endpointUrl }}</span>
+    <span class="icon">
+      <auth-application-healthcheck [id]="value.id"
+      ></auth-application-healthcheck>
+    </span>
+    <span class="url" [title]="value.endpointUrl">{{ value.endpointUrl }}</span>
   </span>
 
   <span *ngSwitchCase="'CREATION_DATE_TIME'" class="endpoint-url">

@@ -110,7 +110,7 @@ export class UserListComponent implements OnInit {
 
   private createFormModel(user: WsUser): UserFormModel {
     return {
-      user: user,
+      user: Object.assign({}, user),
       updatePassword: false,
       newPassword: null,
       newUser: user.id == null,

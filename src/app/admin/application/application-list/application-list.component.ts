@@ -22,7 +22,7 @@ export class ApplicationListComponent implements OnInit {
   totalCount: Observable<number>;
   loading: boolean;
 
-  editingComponent: WsApplication;
+  editingApplication: WsApplication;
 
   constructor(private applicationService: ApplicationService) {
   }
@@ -51,23 +51,23 @@ export class ApplicationListComponent implements OnInit {
   }
 
   onNewApplicationClick() {
-    this.editingComponent = this.applicationService.createEmptyApplication();
+    this.editingApplication = this.applicationService.createEmptyApplication();
   }
 
   onApplicationEdited(application: WsApplication) {
     this.applicationService.saveApplication(application)
       .subscribe(() => {
-        this.editingComponent = null;
+        this.editingApplication = null;
         this.reload();
       });
   }
 
   onApplicationEditCancel() {
-    this.editingComponent = null;
+    this.editingApplication = null;
   }
 
   onApplicationSelected(value: WsApplication) {
-    this.editingComponent = value;
+    this.editingApplication = Object.assign({}, value);
   }
 
   private createInitialFilter(): WsApplicationFilter {
