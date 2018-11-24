@@ -11,5 +11,3 @@ ADD httpd.conf /usr/local/apache2/conf/httpd.conf
 
 ENTRYPOINT ["/opt/entrypoint.sh"]
 CMD ["httpd-foreground"]
-
-:
