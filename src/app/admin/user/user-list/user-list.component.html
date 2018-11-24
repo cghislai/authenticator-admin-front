@@ -33,6 +33,7 @@
       <auth-user-form [ngModel]="editingUserFormModel"
                       (ngModelChange)="onUserEdited($event)"
                       (cancel)="onUserEditCancel()"
+                      (delete)="onEditingUserDelete()"
       ></auth-user-form>
       <div *ngIf="!editingUserFormModel.newUser">
         <auth-user-application-list [userId]="editingUserFormModel.user.id"
@@ -43,3 +44,27 @@
     </div>
   </p-dialog>
 </div>
+
+
+<p-toast position="center" [key]="userDeleteConfirmationToastKey"
+         (onClose)="onUserDeleteConfirmationRejected()"
+         [modal]="true" [baseZIndex]="5000">
+  <ng-template let-message pTemplate="message">
+    <div style="text-align: center">
+      <i class="pi pi-exclamation-triangle" style="font-size: 3em"></i>
+      <h3>{{message.summary}}</h3>
+      <p>{{message.detail}}</p>
+    </div>
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-6">
+        <button type="button" pButton (click)="onUserDeleteConfirmationConfirmed()"
+                label="Yes - Forget everything about this user" class="ui-button-danger"></button>
+      </div>
+      <div class="ui-g-6">
+        <button type="button" pButton (click)="onUserDeleteConfirmationRejected()"
+                label="No" class="ui-button-secondary"></button>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
+

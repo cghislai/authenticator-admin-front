@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
 import {ApplicationColumns} from '../application-column/application-columns';
-import {LazyLoadEvent} from 'primeng/api';
+import {LazyLoadEvent, MessageService} from 'primeng/api';
 import {debounceTime, delay, map, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
 import {ApplicationService} from '../application.service';
 import {myThrottleTime} from '../../../utils/throttle-time';
@@ -13,6 +13,7 @@ import {WsApplication, WsApplicationFilter, WsPagination, WsResultList} from '@c
   styleUrls: ['./application-list.component.scss'],
 })
 export class ApplicationListComponent implements OnInit {
+  applicationDeleteConfirmationToastKey = `application-delete-confirmation`;
 
   filter = new BehaviorSubject<WsApplicationFilter>(this.createInitialFilter());
   wsPagination = new BehaviorSubject<WsPagination>(this.crateInitialWsPagination());
@@ -24,7 +25,8 @@ export class ApplicationListComponent implements OnInit {
 
   editingApplication: WsApplication;
 
-  constructor(private applicationService: ApplicationService) {
+  constructor(private applicationService: ApplicationService,
+              private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -69,6 +71,38 @@ export class ApplicationListComponent implements OnInit {
   onApplicationSelected(value: WsApplication) {
     this.editingApplication = Object.assign({}, value);
   }
+
+
+
+  onEditingApplicationDelete() {
+    if (this.editingApplication == null || this.editingApplication.id == null) {
+      return;
+    }
+    this.messageService.add({
+      summary: 'Are you sure about deleting this application?',
+      detail: `Removing an application is an irreversible action requiring no active users linked to it.
+      Users which were only linked to this application will be removed.`,
+      key: this.applicationDeleteConfirmationToastKey,
+      sticky: true,
+      severity: 'warn',
+    });
+  }
+
+  onApplicationDeleteConfirmationRejected() {
+    this.messageService.clear(this.applicationDeleteConfirmationToastKey);
+  }
+
+  onApplicationDeleteConfirmationConfirmed() {
+    this.messageService.clear(this.applicationDeleteConfirmationToastKey);
+    this.applicationService.removeApplication(this.editingApplication.id).subscribe(
+      () => {
+        this.editingApplication = null;
+        this.reload();
+      },
+    );
+  }
+
+
 
   private createInitialFilter(): WsApplicationFilter {
     return {};

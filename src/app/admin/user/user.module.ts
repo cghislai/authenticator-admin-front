@@ -14,6 +14,7 @@ import {DataViewModule} from 'primeng/dataview';
 import {UserApplicationComponent} from './user-application/user-application.component';
 import {UserApplicationListComponent} from './user-application-list/user-application-list.component';
 import {SharedModule} from '../../shared/shared.module';
+import {ToastModule} from 'primeng/toast';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import {SharedModule} from '../../shared/shared.module';
     DialogModule,
     CheckboxModule,
     DataViewModule,
+    ToastModule,
   ],
   declarations: [
     UserListComponent,

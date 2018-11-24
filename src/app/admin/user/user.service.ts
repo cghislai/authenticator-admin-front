@@ -75,6 +75,15 @@ export class UserService {
       );
   }
 
+  removeUser(userId: number): Observable<any> {
+    return this.httpClient.delete(`${this.backendUrl}/user/${userId}`).pipe(
+      tap(
+        () => this.onDeleteUserSuccess(),
+        (error) => this.onDeleteUserError(error),
+      ),
+    );
+  }
+
   createEmptyUser(): WsUser {
     return {
       id: null,
@@ -148,6 +157,22 @@ export class UserService {
     this.messageService.add({
       severity: 'error',
       summary: 'User applicatoin could not be updated',
+    });
+  }
+
+
+  private onDeleteUserSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'User removed',
+    });
+  }
+
+
+  private onDeleteUserError(error: any) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'User could not be removed',
     });
   }
 }

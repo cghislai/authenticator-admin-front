@@ -84,6 +84,16 @@ export class ApplicationService {
     );
   }
 
+
+  removeApplication(applicationId: number): Observable<any> {
+    return this.httpClient.delete(`${this.adminApiUrl}/application/${applicationId}`).pipe(
+      tap(
+        () => this.onDeleteApplicationSuccess(),
+        (error) => this.onDeleteApplicationError(error),
+      ),
+    );
+  }
+
   createEmptyApplication(): WsApplication {
     return {
       id: null,
@@ -130,6 +140,22 @@ export class ApplicationService {
     this.messageService.add({
       severity: 'error',
       summary: 'Application could not be saved',
+    });
+  }
+
+
+  private onDeleteApplicationSuccess() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Application removed',
+    });
+  }
+
+
+  private onDeleteApplicationError(error: any) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Application could not be removed',
     });
   }
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
 import {UserColumns} from '../user-column/user-columns';
-import {LazyLoadEvent} from 'primeng/api';
+import {LazyLoadEvent, MessageService} from 'primeng/api';
 import {debounceTime, delay, map, mergeMap, publishReplay, refCount, switchMap, tap} from 'rxjs/operators';
 import {UserService} from '../user.service';
 import {myThrottleTime} from '../../../utils/throttle-time';
@@ -14,6 +14,7 @@ import {WsPagination, WsResultList, WsUser, WsUserFilter} from '@charlyghislain/
   styleUrls: ['./user-list.component.scss'],
 })
 export class UserListComponent implements OnInit {
+  userDeleteConfirmationToastKey = `user-delete-confirmation`;
 
   filter = new BehaviorSubject<WsUserFilter>(this.createInitialFilter());
   wsPagination = new BehaviorSubject<WsPagination>(this.crateInitialWsPagination());
@@ -25,7 +26,8 @@ export class UserListComponent implements OnInit {
 
   editingUserFormModel: UserFormModel;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService,
+              private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -56,8 +58,8 @@ export class UserListComponent implements OnInit {
     this.editingUserFormModel = this.createFormModel(newUser);
   }
 
-  onUserEdited(model: UserFormModel) {
-    this.saveUserForm(model)
+  onUserEdited(model: any) {
+    this.saveUserForm(model as UserFormModel)
       .subscribe(() => {
         this.editingUserFormModel = null;
         this.reload();
@@ -71,6 +73,37 @@ export class UserListComponent implements OnInit {
   onUserSelected(value: WsUser) {
     this.editingUserFormModel = this.createFormModel(value);
   }
+
+
+  onEditingUserDelete() {
+    if (this.editingUserFormModel.newUser) {
+      return;
+    }
+    this.messageService.add({
+      summary: 'Are you sure about deleting this user?',
+      detail: ` Removing an user is an irreversible action. All applications linked to it will be asked to clear their data.
+        You may wish to rather deactivate it, or an application link, in order to prevent future tokens to be signed
+        for this user.`,
+      key: this.userDeleteConfirmationToastKey,
+      sticky: true,
+      severity: 'warn',
+    });
+  }
+
+  onUserDeleteConfirmationRejected() {
+    this.messageService.clear(this.userDeleteConfirmationToastKey);
+  }
+
+  onUserDeleteConfirmationConfirmed() {
+    this.messageService.clear(this.userDeleteConfirmationToastKey);
+    this.userService.removeUser(this.editingUserFormModel.user.id).subscribe(
+      () => {
+        this.editingUserFormModel = null;
+        this.reload();
+      },
+    );
+  }
+
 
   private createInitialFilter(): WsUserFilter {
     return {};

@@ -1,6 +1,8 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {UserFormModel} from '../domain/user-form-model';
+import {MessageService} from 'primeng/api';
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'auth-user-form',
@@ -14,11 +16,14 @@ import {UserFormModel} from '../domain/user-form-model';
 })
 export class UserFormComponent implements OnInit, ControlValueAccessor {
 
+
   model: UserFormModel;
   disabled: boolean;
 
   @Output()
   cancel = new EventEmitter<any>();
+  @Output()
+  delete = new EventEmitter<any>();
 
   private onChangeFunction: Function;
   private onTouchedFunction: Function;
@@ -52,5 +57,9 @@ export class UserFormComponent implements OnInit, ControlValueAccessor {
 
   onCancel() {
     this.cancel.next(null);
+  }
+
+  onDeleteClicked() {
+    this.delete.next(null);
   }
 }

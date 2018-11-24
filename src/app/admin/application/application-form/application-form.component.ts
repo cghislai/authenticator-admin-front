@@ -25,6 +25,9 @@ export class ApplicationFormComponent implements OnInit, ControlValueAccessor {
   @Output()
   cancel = new EventEmitter<any>();
 
+  @Output()
+  delete = new EventEmitter<any>();
+
   private onChangeFunction: Function;
   private onTouchedFunction: Function;
 
@@ -80,5 +83,10 @@ export class ApplicationFormComponent implements OnInit, ControlValueAccessor {
 
   onCancel() {
     this.cancel.next(null);
+  }
+
+
+  onDeleteClicked() {
+    this.delete.next(null);
   }
 }

@@ -20,6 +20,7 @@ import {ApplicationFormComponent} from './application-form/application-form.comp
 import {ApplicationColumnComponent} from './application-column/application-column.component';
 import {ApplicationHealthcheckModule} from '../application-healthcheck/application-healthcheck.module';
 import {SharedModule} from '../../shared/shared.module';
+import {ToastModule} from 'primeng/toast';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import {SharedModule} from '../../shared/shared.module';
     DialogModule,
     InplaceModule,
     InputTextareaModule,
+    ToastModule
   ],
   declarations: [
     ApplicationListComponent,

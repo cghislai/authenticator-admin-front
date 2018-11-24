@@ -93,6 +93,12 @@
   <div class="actions">
     <input type="submit" hidden>
     <button type="button" pButton
+            *ngIf="!model.newUser"
+            label="Delete"
+            class="ui-button-danger"
+            (click)="onDeleteClicked()"></button>
+
+    <button type="button" pButton
             label="Cancel"
             class="ui-button-secondary"
             (click)="onCancel()"></button>
