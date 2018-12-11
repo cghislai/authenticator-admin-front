@@ -14,7 +14,7 @@ mkdir -p /var/www
 cat << EOF > ${CONFIG_JSON_FILE}
 {
   "authenticatorApiUrl": "${AUTHENTICATOR_URL}",
-  "authenticatorAdminApiUrl": "${AUTHENTICATOR_URL}/admin",
+  "authenticatorAdminApiUrl": "${AUTHENTICATOR_URL}/admin"
 }
 EOF
 
