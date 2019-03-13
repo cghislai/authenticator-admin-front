@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  authenticatorApiUrl: 'https://localhost:8443',
-  authenticatorAdminApiUrl: 'https://localhost:8443/admin',
+  authenticatorApiUrl: 'https://localhost:8443/authenticator-web',
+  authenticatorAdminApiUrl: 'https://localhost:8443/authenticator-web/admin',
 };
 
 /*
