@@ -104,8 +104,8 @@ EOF
                           tar  -cvzf ../${ARCHIVE} ./
                           cd ../../..
 
-                          UPLOAD_URL=$(echo "$RELEASE_ASSETS_URL" | sed 's/{?name,label}//')
-                          LABEL="${ARCHIVE}%20$BRANCH_NAME%20release
+                          UPLOAD_URL=$(echo "$RELEASE_ASSETS_URL" | sed "s/{?name,label}//")
+                          LABEL="${ARCHIVE}%20$BRANCH_NAME%20release"
                           # Upload archive as github release asset
                           ARCHIVE_URL=$(curl -v -X POST \
                               -H 'Content-Type: application/x-gzip' \
