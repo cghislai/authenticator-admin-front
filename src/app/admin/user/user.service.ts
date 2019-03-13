@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {MessageService} from 'primeng/api';
 import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
@@ -140,9 +140,11 @@ export class UserService {
   }
 
   private onSetPasswordError(error: any) {
+    const details = this.getSetPasswordErrorDetails(error);
     this.messageService.add({
       severity: 'error',
       summary: 'Password could not be updated',
+      detail: details,
     });
   }
 
@@ -174,5 +176,22 @@ export class UserService {
       severity: 'error',
       summary: 'User could not be removed',
     });
+  }
+
+  private getSetPasswordErrorDetails(error: any) {
+    if (error instanceof HttpErrorResponse) {
+      const errorBody = error.error;
+      if (errorBody != null && errorBody.code != null) {
+        return this.getSetPasswordErrorDetailsMessage(errorBody.code, errorBody.description);
+      }
+    }
+  }
+
+  private getSetPasswordErrorDetailsMessage(code: string, description: string) {
+    switch (code) {
+      case 'INVALID_PASSWORD': {
+        return `Invalid password`;
+      }
+    }
   }
 }
