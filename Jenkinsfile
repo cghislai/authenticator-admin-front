@@ -102,7 +102,7 @@ EOF
                           # Compress
                           cd dist/auth-front/
                           tar  -cvzf ../${ARCHIVE} ./
-                          cd ../../..
+                          cd ../../
 
                           UPLOAD_URL=$(echo "$RELEASE_ASSETS_URL" | sed "s/{?name,label}//")
                           LABEL="${ARCHIVE}%20$BRANCH_NAME%20release"
@@ -110,7 +110,7 @@ EOF
                           ARCHIVE_URL=$(curl -v -X POST \
                               -H 'Content-Type: application/x-gzip' \
                               -u cghislai:$SECRET \
-                              --data-binary @dist/authenticator-admin-front/${ARCHIVE} \
+                              --data-binary @dist/${ARCHIVE} \
                               "${UPLOAD_URL}?name=${ARCHIVE}&label=$LABEL" \
                               | jq -r .browser_download_url)
                           if [ "$ARCHIVE_URL" = "null"  ] ; then exit 1 ; fi
