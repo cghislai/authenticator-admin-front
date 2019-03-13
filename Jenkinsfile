@@ -6,14 +6,7 @@ pipeline {
     }
     parameters {
         booleanParam(name: 'SKIP_TESTS', defaultValue: true, description: 'Skip tests')
-        string(
-          name: 'PUBLISH_URL', defaultValue: 'https://nexus.valuya.be/nexus/repository',
-          description: 'Deployment repository url'
-        )
-        string(
-          name: 'PUBLISH_REPO', defaultValue: 'web-snapshots',
-          description: 'Deployment repository'
-        )
+        booleanParam(name: 'FORCE_DEPLOY', defaultValue: false, description: 'Force deploy on feature branches')
    }
     stages {
         stage ('Install') {
@@ -45,40 +38,85 @@ pipeline {
             }
         }
         stage ('Publish') {
+
+            when { allOf {
+              anyOf {
+                 environment name: 'BRANCH_NAME', value: 'master'
+                 environment name: 'BRANCH_NAME', value: 'dev'
+                 expression { return params.FORCE_DEPLOY == true }
+              }
+              expression { return currentBuild.result != 'FAILURE' }
+             }}
             steps {
-                withCredentials([usernameColonPassword(credentialsId: 'nexus-basic-auth', variable: 'NEXUS_BASIC_AUTH')]) {
+                withCredentials([string(credentialsId: 'github-cghislai-token', variable: 'SECRET')]) {
                   ansiColor('xterm') {
                      nodejs(nodeJSInstallationName: 'node 10', configId: 'npmrc-@charlyghislain') {
                          sh '''
-                            export VERSION="$(./node_modules/.bin/json -f package.json version)"
-                            export COMMIT="$(git rev-parse --short HEAD)"
-                            echo "$VERSION" | grep "alpha|beta" && export VERSION="${VERSION}-${COMMIT}"
 
-                            export ARCHIVE="authenticator-admin-front-${VERSION}.tgz"
+                          VERSION="$(./node_modules/.bin/json -f package.json version)"
+                          COMMIT="$(git rev-parse --short HEAD)"
+                          FULLVERSION=$VERSION
+                          PRERELEASE=false
+                          echo "$VERSION" | grep 'alpha\\|beta' && export PRERELEASE=true
+                          if [ "$PRERELEASE" = "true" ] ; then
+                            FULLVERSION="${VERSION}-${COMMIT}"
+                          fi
 
-                            # Compress
-                            cd dist/auth-front/
-                            tar  -cvzf ../${ARCHIVE} ./
-                            cd ../../
+                          RELEASE_EXISTS=true
+                          RELEASE_ASSETS_URL="$(curl -v -q \
+                            -u cghislai:$SECRET \
+                            https://api.github.com/repos/cghislai/authenticator-admin-front/releases/tags/v$VERSION \
+                            | jq -r .upload_url || export RELEASE_EXISTS=FALSE)"
+                          if [ "$RELEASE_ASSETS_URL" = "null"  ] ; then export  RELEASE_EXISTS=FALSE ; fi
+                          if [ -z "$RELEASE_ASSETS_URL" ] ; then export  RELEASE_EXISTS=FALSE ; fi
+                          if [ "$RELEASE_EXISTS" != "true" ] ; then
 
-                            # Upload archives
-                            curl -v --user $NEXUS_BASIC_AUTH --upload-file dist/${ARCHIVE} \
-                            ${PUBLISH_URL}/${PUBLISH_REPO}/com/charlyghislain/authenticator-admin-front/${ARCHIVE}
+                            RELEASE_EXISTS=true
 
-                            # Create .latest 'links' (branch heads) if required
-                            if [ "${BRANCH_NAME}" = "master" ] ; then
-                              export ARCHIVE_LINK="master.latest"
-                              echo "$ARCHIVE" > ./${ARCHIVE_LINK}
-                              curl -v --user $NEXUS_BASIC_AUTH --upload-file ./${ARCHIVE_LINK} \
-                                ${PUBLISH_URL}/${PUBLISH_REPO}/com/charlyghislain/authenticator-admin-front/${ARCHIVE_LINK}
+                            # Keep prerelease false so latest release point to it while still deployed
+                            cat << EOF >./release.json
+{\"tag_name\": \"v$VERSION\",
+\"target_commitish\": \"$BRANCH_NAME\",
+\"name\": \"$VERSION\",
+\"body\": \"Release $VERSION\",
+\"draft\": false,
+\"prerelease\": false}
+EOF
+                            # create release if needed
+                            RELEASE_ASSETS_URL=$(curl -v -H 'Content-Type: application/json' \
+                              -u cghislai:$SECRET \
+                              -d "$(cat ./release.json)" \
+                              https://api.github.com/repos/cghislai/authenticator-admin-front/releases \
+                              | jq -r .upload_url || export RELEASE_EXISTS=FALSE)
+                            if [ "$RELEASE_ASSETS_URL" = "null"  ] ; then export  RELEASE_EXISTS=FALSE ; fi
+                            if [ -z "$RELEASE_ASSETS_URL" ] ; then export  RELEASE_EXISTS=FALSE ; fi
+                            if [ "$RELEASE_EXISTS" != "true" ] ; then exit 1 ; fi
+                          fi
 
-                            elif [ "${BRANCH_NAME}" = "dev" ] ; then
-                              export ARCHIVE_LINK="dev.latest"
-                              echo "$ARCHIVE" > ./${ARCHIVE_LINK}
-                              curl -v --user $NEXUS_BASIC_AUTH --upload-file ./${ARCHIVE_LINK} \
-                                ${PUBLISH_URL}/${PUBLISH_REPO}/com/charlyghislain/authenticator-admin-front/${ARCHIVE_LINK}
-                            fi
-                        '''
+
+                          ARCHIVE="authenticator-admin-front-${FULLVERSION}.tgz"
+
+                          ## FIXME: Workaround https://github.com/angular/angular-cli/issues/8515
+                          sed -i 's#/ngsw-worker.js#./ngsw-worker.js#' dist/auth-front/main.*.js
+
+                          # Compress
+                          cd dist/auth-front/
+                          tar  -cvzf ../${ARCHIVE} ./
+                          cd ../../..
+
+                          UPLOAD_URL=$(echo "$RELEASE_ASSETS_URL" | sed 's/{?name,label}//')
+                          LABEL="${ARCHIVE}%20$BRANCH_NAME%20release
+                          # Upload archive as github release asset
+                          ARCHIVE_URL=$(curl -v -X POST \
+                              -H 'Content-Type: application/x-gzip' \
+                              -u cghislai:$SECRET \
+                              --data-binary @dist/authenticator-admin-front/${ARCHIVE} \
+                              "${UPLOAD_URL}?name=${ARCHIVE}&label=$LABEL" \
+                              | jq -r .browser_download_url)
+                          if [ "$ARCHIVE_URL" = "null"  ] ; then exit 1 ; fi
+                          if [ -z "$ARCHIVE_URL" ] ; then exit 1 ; fi
+
+                         '''
                      }
                   }
                 }
