@@ -1,6 +1,6 @@
 {
   "name": "auth-front",
-  "version": "1.0.3-beta.1",
+  "version": "1.0.6-beta.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4201",
